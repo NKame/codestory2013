@@ -30,6 +30,15 @@ then
 	update($dr);
 end
 
+rule "Vas-y balance ton MarkDown"
+when
+	$dr : DecisionRoutage(decide == false)
+	Parametre(nom == "q", valeur == "Es tu pret a recevoir une enonce au format markdown par http post(OUI/NON)")
+then
+	$dr.resoudStatique("OUI.txt");
+	update($dr);
+end
+
 rule "Question inconnue"
 salience -1
 when
@@ -38,4 +47,31 @@ when
 then
 	$dr.resoudStatique("NON.txt");
 	update($dr);
+end
+
+rule "Favicon"
+/* ce serait dommage de la capturer */
+when 
+	$dr : DecisionRoutage(decide == false, path == "/favicon.ico")
+then
+	$dr.redirectPermanent("http://www.cynicalturtle.net/kame/themes/kbloggo/css/turtle.gif");
+	update($dr);
+end
+
+rule "Assistance"
+/* tout ce qui est /assistance, on traite en interne */
+when
+	$dr : DecisionRoutage(decide == false, path matches "/assistance/.*")
+then
+	$dr.include();
+	update($dr);
+end	
+
+rule "Requete inconnue"
+salience -100
+when
+	$dr : DecisionRoutage(decide == false)
+then
+	$dr.resoudDynamique('/assistance/capture');
+	update($dr)
 end

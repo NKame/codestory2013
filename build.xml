@@ -82,6 +82,10 @@
 				<include name=".gitignore" />
 			</preserveintarget>
 		</sync>
+		<!-- certains jars ne sont pas Mavenisés, mais ils sont mieux que les Mavenisés -->
+		<copy todir="${web.lib.dir}">
+			<fileset dir="releng/lib" includes="*.jar" />
+		</copy>
 	</target>
 
 	<target name="-init-vars">

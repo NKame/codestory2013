@@ -36,16 +36,25 @@ public class RouteurFilter implements Filter {
 		final HttpServletResponse response = (HttpServletResponse) sResponse;
 
 		final DecisionRoutage dec = new DecisionRoutage();
-		dec.setPath(request.getPathInfo());
+		dec.setPath(request.getRequestURI());
 		final Collection<Parametre> parametres = Parametre.derouleRequete(request.getParameterMap());
-		
+
 		agent.roule(dec, parametres);
 
 		switch (dec.getTypeRoutage()) {
 		case 1:
-			// routage statique
+		// routage statique
+		{
 			RequestDispatcher rd = sRequest.getRequestDispatcher(dec.getTargetPath());
 			rd.forward(sRequest, sResponse);
+		}
+			break;
+		case 2:
+		// redirect permanent
+		{
+			response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+			response.addHeader("Location", dec.getTargetPath());
+		}
 			break;
 		default:
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);

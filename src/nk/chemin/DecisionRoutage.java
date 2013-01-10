@@ -1,6 +1,5 @@
 package nk.chemin;
 
-import java.util.Map;
 
 /**
  * Plein de getter et setters, c'est la rule de draigles.
@@ -11,7 +10,7 @@ public class DecisionRoutage {
 	private String methode;
 
 	/**
-	 * 0 - inconnu 1 - page statique
+	 * 0 - inconnu, 1 - interne application, 2 - redirect permanent
 	 */
 	private int typeRoutage = 0;
 	private String typeMIME = "text/html";
@@ -29,6 +28,33 @@ public class DecisionRoutage {
 		typeRoutage = 1;
 	}
 
+	/**
+	 * Décide de router en interne.
+	 * 
+	 * @param chemin
+	 */
+	public void resoudDynamique(String chemin) {
+		decide = true;
+		// huhu
+		targetPath = chemin;
+		typeRoutage = 1;
+	}
+	
+	/**
+	 * On continue comme si de rien n'était.
+	 */
+	public void include() {
+		decide = true;
+		targetPath = path;
+		typeRoutage = 1;
+	}
+	
+	public void redirectPermanent(String uriAbsolue) {
+		decide = true;
+		targetPath = uriAbsolue;
+		typeRoutage = 2;
+	}
+	
 	public boolean isDecide() {
 		return decide;
 	}
