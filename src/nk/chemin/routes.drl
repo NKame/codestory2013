@@ -1,0 +1,11 @@
+package codestory2013;
+
+import nk.chemin.DecisionRoutage;
+
+rule "PremiereQuestion"
+when 
+	$dr : DecisionRoutage(decide == false, parametres["q"][0] == "Quelle est ton adresse email")
+then
+	$dr.resoudStatique("mail.txt");
+	update($dr);
+end

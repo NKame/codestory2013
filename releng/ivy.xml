@@ -1,0 +1,19 @@
+<ivy-module version="2.0">
+	<info organisation="cynicalturtle.net" module="codestory2013" />
+	<configurations>
+		<conf name="default" />
+		<conf name="build" visibility="private" />
+		<conf name="test" visibility="private" />
+	</configurations>
+
+	<dependencies>
+		<dependency org="org.drools" name="knowledge-api" rev="5.5.0.Final" conf="default->default" />
+		<dependency org="org.drools" name="drools-core" rev="5.5.0.Final" conf="default->default" />
+		<dependency org="org.drools" name="drools-clips" rev="5.5.0.Final" conf="default->default" />
+		<dependency org="org.drools" name="drools-compiler" rev="5.5.0.Final" conf="default->default" />
+		<dependency org="org.slf4j" name="slf4j-jdk14" rev="1.6.4" conf="default->default" />
+		<dependency org="junit" name="junit" rev="4.11" conf="test->default" />
+		<dependency org="org.apache.tomcat" name="tomcat-servlet-api" rev="7.0.0"
+			conf="build->default" />		
+	</dependencies>
+</ivy-module>

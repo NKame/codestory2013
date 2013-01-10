@@ -1,0 +1,53 @@
+<project name="codestory2013" default="dist" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<import file="releng/build-ivy.xml" />
+	<property name="src.dir" value="src" />
+	<property name="lib.dir" value="lib" />	
+	<property name="web.lib.dir" value="WebContent/WEB-INF/lib" />
+	<property name="tgt.cls.dir" value="target/classes" />
+
+	<target name="dist">
+	</target>
+
+	<target name="compile" depends="load-jars,-init-vars">
+		<echo message="Compiling version ${releaseVersion}" />
+		<mkdir dir="${tgt.cls.dir}" />
+		<delete>
+			<fileset dir="${tgt.cls.dir}" />
+		</delete>
+		<javac destdir="${tgt.cls.dir}" classpathref="compile.classpath" encoding="ISO-8859-1" debug="on" debuglevel="lines,vars,source" includeantruntime="false">
+			<src path="${src.dir}" />
+		</javac>
+	</target>
+
+	<target name="load-jars" depends="init-ivy">
+		<ivy:resolve />
+		<ivy:retrieve pattern="${lib.dir}/[conf]/[artifact].[ext]" sync="true" />
+		<mkdir dir="${lib.dir}/default" />
+		<sync todir="${web.lib.dir}" includeemptydirs="true">
+			<fileset dir="${lib.dir}/default" includes="*.jar" />
+		</sync>
+	</target>
+
+	<target name="-init-vars">
+		<path id="run.classpath">
+			<fileset dir="${web.lib.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+		<property name="run.classpath" refid="run.classpath" />
+
+		<path id="build.classpath">
+			<fileset dir="${lib.dir}/build">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+		<property name="build.classpath" refid="build.classpath" />
+
+		<path id="compile.classpath">
+			<path refid="run.classpath" />
+			<path location="src" />
+			<path refid="build.classpath" />
+		</path>
+		<property name="compile.classpath" refid="compile.classpath" />
+	</target>
+</project>
