@@ -33,6 +33,14 @@ public class Question1Test {
 		Assert.assertEquals("WEB-INF/static/OUI.txt", dr.getTargetPath());
 	}
 
+	@Test
+	public void testBonheur() {
+		final DecisionRoutage dr = new DecisionRoutage();
+		agent.roule(dr, new Parametre("q", "Es tu heureux de participer(OUI/NON)"));
+		
+		Assert.assertEquals(1, dr.getTypeRoutage());
+		Assert.assertEquals("WEB-INF/static/OUI.txt", dr.getTargetPath());
+	}	
 	
 	@Test
 	public void testQuestionInconnue() {
