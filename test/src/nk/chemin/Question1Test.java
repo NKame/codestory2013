@@ -1,7 +1,5 @@
 package nk.chemin;
 
-import java.util.Collections;
-
 import nk.rules.AgentDeReconaissance;
 
 import org.junit.Assert;
@@ -20,11 +18,20 @@ public class Question1Test {
 	@Test
 	public void testOK() {
 		final DecisionRoutage dr = new DecisionRoutage();
-		dr.setParametres(Collections.singletonMap("q", new String[] { "Quelle est ton adresse email" }));
-
-		agent.roule(dr);
+		agent.roule(dr, new Parametre("q", "Quelle est ton adresse email"));
 		
 		Assert.assertEquals(1, dr.getTypeRoutage());
 		Assert.assertEquals("WEB-INF/static/mail.txt", dr.getTargetPath());
+	}
+	
+	@Test
+	public void testPasDeplantage() {
+		final DecisionRoutage dr = new DecisionRoutage();
+		agent.roule(dr);
+	
+		dr.setPath("aupif");
+		agent.roule(dr);
+				
+		agent.roule(dr, new Parametre("q", null));
 	}
 }

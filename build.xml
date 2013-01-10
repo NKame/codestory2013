@@ -1,30 +1,86 @@
 <project name="codestory2013" default="dist" xmlns:ivy="antlib:org.apache.ivy.ant">
 	<import file="releng/build-ivy.xml" />
 	<property name="src.dir" value="src" />
-	<property name="lib.dir" value="lib" />	
+	<property name="lib.dir" value="lib" />
 	<property name="web.lib.dir" value="WebContent/WEB-INF/lib" />
-	<property name="tgt.cls.dir" value="target/classes" />
-
-	<target name="dist">
-	</target>
+	<property name="classes" value="target/classes" />
+	<property name="test_classes" value="target/test/classes" />
+	<property name="test_reports" value="target/test/reports" />
 
 	<target name="compile" depends="load-jars,-init-vars">
 		<echo message="Compiling version ${releaseVersion}" />
-		<mkdir dir="${tgt.cls.dir}" />
+		<mkdir dir="${classes}" />
 		<delete>
-			<fileset dir="${tgt.cls.dir}" />
+			<fileset dir="${classes}" />
 		</delete>
-		<javac destdir="${tgt.cls.dir}" classpathref="compile.classpath" encoding="ISO-8859-1" debug="on" debuglevel="lines,vars,source" includeantruntime="false">
+		<javac destdir="${classes}" classpathref="compile.classpath" encoding="ISO-8859-1" debug="on" debuglevel="lines,vars,source" includeantruntime="false">
 			<src path="${src.dir}" />
 		</javac>
+		<copy todir="${classes}">
+			<fileset dir="${src.dir}">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="compile-tests" depends="compile">
+		<mkdir dir="${test_classes}" />
+		<delete>
+			<fileset dir="${test_classes}" />
+		</delete>
+		<javac destdir="${test_classes}" encoding="ISO-8859-1" debug="on" debuglevel="lines,vars,source" includeantruntime="false">
+			<classpath refid="compile.classpath" />
+			<classpath refid="test.classpath" />
+			<classpath location="${classes}" />
+			<src path="test/src" />
+		</javac>
+		<copy todir="${test_classes}">
+			<fileset dir="test/src">
+				<exclude name="**/*.java" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="run-tests" depends="compile, compile-tests">
+		<mkdir dir="${test_reports}" />
+		<delete>
+			<fileset dir="${test_reports}" />
+		</delete>
+		<junit printsummary="true" haltonfailure="false" fork="true">
+			<formatter type="xml" />
+			<classpath refid="run.classpath" />
+			<classpath refid="test.classpath" />
+			<classpath location="${classes}" />
+			<classpath location="${test_classes}" />
+			<batchtest todir="${test_reports}">
+				<fileset dir="${test_classes}">
+					<include name="**/*Test.class" />
+					<exclude name="**/AllTests.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="dist" depends="compile">
+		<war destfile="target/ROOT.war" webxml="WebContent/WEB-INF/web.xml">
+			<fileset dir="WebContent">
+				<exclude name="WEB-INF/web.xml" />
+			</fileset>
+			<classes dir="${classes}" />
+		</war>
 	</target>
 
 	<target name="load-jars" depends="init-ivy">
+		<!-- Git, le système qui a du mal avec la notion de "dossier", tellement années 60 -->
+		<mkdir dir="${lib.dir}" />
 		<ivy:resolve />
 		<ivy:retrieve pattern="${lib.dir}/[conf]/[artifact].[ext]" sync="true" />
 		<mkdir dir="${lib.dir}/default" />
 		<sync todir="${web.lib.dir}" includeemptydirs="true">
 			<fileset dir="${lib.dir}/default" includes="*.jar" />
+			<preserveintarget>
+				<include name=".gitignore" />
+			</preserveintarget>
 		</sync>
 	</target>
 
@@ -43,9 +99,15 @@
 		</path>
 		<property name="build.classpath" refid="build.classpath" />
 
+		<path id="test.classpath">
+			<fileset dir="${lib.dir}/test">
+				<include name="**/*.jar" />
+			</fileset>
+		</path>
+		<property name="test.classpath" refid="test.classpath" />
+
 		<path id="compile.classpath">
 			<path refid="run.classpath" />
-			<path location="src" />
 			<path refid="build.classpath" />
 		</path>
 		<property name="compile.classpath" refid="compile.classpath" />

@@ -2,6 +2,7 @@ package nk.chemin;
 
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Collection;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -36,9 +37,9 @@ public class RouteurFilter implements Filter {
 
 		final DecisionRoutage dec = new DecisionRoutage();
 		dec.setPath(request.getPathInfo());
-		dec.setParametres(request.getParameterMap());
-
-		agent.roule(dec);
+		final Collection<Parametre> parametres = Parametre.derouleRequete(request.getParameterMap());
+		
+		agent.roule(dec, parametres);
 
 		switch (dec.getTypeRoutage()) {
 		case 1:

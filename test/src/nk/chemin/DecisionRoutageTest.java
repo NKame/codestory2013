@@ -10,7 +10,7 @@ public class DecisionRoutageTest {
 
 	@Test
 	public void testCompilationRegles() {
-		AgentDeReconaissance agent = new AgentDeReconaissance("/nk/chemin/routes.drl");
+		new AgentDeReconaissance("/nk/chemin/routes.drl");
 	}
 
 	@Test

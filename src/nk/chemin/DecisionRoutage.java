@@ -8,7 +8,6 @@ import java.util.Map;
 public class DecisionRoutage {
 	private boolean decide = false;
 	private String path;
-	private Map<String, String[]> parametres;
 	private String methode;
 
 	/**
@@ -44,14 +43,6 @@ public class DecisionRoutage {
 
 	public void setPath(String path) {
 		this.path = path;
-	}
-
-	public Map<String, String[]> getParametres() {
-		return parametres;
-	}
-
-	public void setParametres(Map<String, String[]> map) {
-		this.parametres = map;
 	}
 
 	public String getMethode() {
