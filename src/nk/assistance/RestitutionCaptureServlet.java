@@ -19,7 +19,7 @@ public class RestitutionCaptureServlet extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.addHeader("Content-type", "application/json");
+		resp.addHeader("Content-type", "application/json;charset=UTF-8");
 		final JSONWriter jason = new JSONWriter(false);
 		final Set<Requete> demandes = restitue(getServletContext());
 		

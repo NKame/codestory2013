@@ -39,6 +39,15 @@ then
 	update($dr);
 end
 
+rule "Enonce 1 recu"
+when
+	$dr : DecisionRoutage(decide == false)
+	Parametre(nom == "q", valeur == "As tu bien recu le premier enonce(OUI/NON)")
+then
+	$dr.resoudStatique("OUI.txt");
+	update($dr);
+end 
+
 rule "Question inconnue"
 salience -1
 when
