@@ -11,3 +11,13 @@ then
 	$dr.resoudStatique("mail.txt");
 	update($dr);
 end
+
+rule "Question inconnue"
+salience -1
+when
+	$dr : DecisionRoutage(decide == false)
+	Parametre(nom == "q", valeur matches ".*\\(OUI/NON\\)")
+then
+	$dr.resoudStatique("NON.txt");
+	update($dr);
+end

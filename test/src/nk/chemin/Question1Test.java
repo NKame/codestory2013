@@ -25,6 +25,15 @@ public class Question1Test {
 	}
 	
 	@Test
+	public void testQuestionInconnue() {
+		final DecisionRoutage dr = new DecisionRoutage();
+		agent.roule(dr, new Parametre("q", "Ca va bien (OUI/NON)"));
+		
+		Assert.assertEquals(1, dr.getTypeRoutage());
+		Assert.assertEquals("WEB-INF/static/NON.txt", dr.getTargetPath());
+	}
+	
+	@Test
 	public void testPasDeplantage() {
 		final DecisionRoutage dr = new DecisionRoutage();
 		agent.roule(dr);
