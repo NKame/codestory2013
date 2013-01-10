@@ -12,6 +12,15 @@ then
 	update($dr);
 end
 
+rule "Abonnement ML"
+when
+	$dr : DecisionRoutage(decide == false)
+	Parametre(nom == "q", valeur == "Es tu abonne a la mailing list(OUI/NON)")
+then
+	$dr.resoudStatique("OUI.txt");
+	update($dr);
+end
+
 rule "Question inconnue"
 salience -1
 when
