@@ -1,2 +1,4 @@
 target
 /build
+/lib/*
+/WebContent/WEB-INF/lib/*
