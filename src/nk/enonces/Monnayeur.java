@@ -19,7 +19,7 @@ public class Monnayeur {
 		final Set<PetiteMonnaie> result = new HashSet<PetiteMonnaie>();
 
 		// pas de slot pour la plus petite unité
-		final MultiLoop ml = new MultiLoop((short) (CentsInfo.values().length - 1), LIMITE);
+		final MultiCompteur ml = new MultiCompteur((short) (CentsInfo.values().length - 1), LIMITE);
 
 		// principe : division euclidienne, enough said
 
