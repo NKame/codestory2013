@@ -19,16 +19,12 @@ public class MultiCompteur {
 	}
 	
 	public void setLimite(short numSlot, int valLimite) {
-		if(valLimite >= (1 << bitParSlot)) {
-			throw new IllegalArgumentException("Compteur " + numSlot + " sous-dimensionné pour " + valLimite);
-		}
+		checkBounds(numSlot, valLimite);
 		max += (valLimite - mask(compteur, numSlot)) << (numSlot * bitParSlot);
 	}
 	
 	public void set(short numSlot, int val) {
-		if(val >= (1 << bitParSlot)) {
-			throw new IllegalArgumentException("Compteur " + numSlot + " sous-dimensionné pour " + val);
-		}
+		checkBounds(numSlot, val);
 		compteur += (val - mask(compteur, numSlot)) << (numSlot * bitParSlot);
 	}
 	
@@ -63,8 +59,32 @@ public class MultiCompteur {
 			return true;
 		}
 		return false;
-	}	
+	}
 	
+	/**
+	 * Renvoie l'état en cours sous forme d'un tableau.
+	 * Comment ça ça détruit toute le travail sur le masquage binaire ?? Chuuuut.
+	 * @return
+	 */
+	public int[] get() {
+		int[] result = new int[nbSlots];
+		for(short i = 0; i < nbSlots; ++i) {
+			result[i] = get(i);
+		}
+		return result;
+	}
+
+	/**
+	 * Et pas James Bond.
+	 * @param numSlot
+	 * @param valLimite
+	 */
+	private void checkBounds(short numSlot, int valLimite) {
+		if(valLimite >= (1 << bitParSlot) || numSlot >= nbSlots) {
+			throw new IllegalArgumentException("Compteur " + numSlot + " sous-dimensionné pour " + valLimite + " ou slot inconnu (" + numSlot + ")");
+		}
+	}
+
 	private int mask(long number, short numSlot) {
 		return (int) ((number >> (numSlot * bitParSlot)) & maxParSlot);
 	}

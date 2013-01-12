@@ -33,6 +33,14 @@ public class PetiteMonnaie {
 		return casiers[ci.ordinal()];
 	}
 
+	public int getTotal() {
+		int total = 0;
+		for(CentsInfo ci : CentsInfo.values()) {
+			total += ci.getMontant() * get(ci);
+		}
+		return total;
+	}
+	
 	public void set(CentsInfo ci, int valeur) {
 		casiers[ci.ordinal()] = valeur;
 	}
@@ -58,4 +66,9 @@ public class PetiteMonnaie {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "PetiteMonnaie [casiers=" + Arrays.toString(casiers) + "]";
+	}	
 }

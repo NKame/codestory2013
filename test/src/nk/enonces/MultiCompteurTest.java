@@ -54,13 +54,13 @@ public class MultiCompteurTest {
 			mc.set(i, max);
 		}
 
-		System.out.println("init : " + mc);
+		// System.out.println("init : " + mc);
 		while (mc.dec()) {
 			if (--maxLoop < 0) {
 				// oups
 				fail("Boucle infinie");
 			}
-			System.out.println(mc);
+			// System.out.println(mc);
 		}
 		if(maxLoop > 0) {
 			fail("Pas assez d'itérations : " + maxLoop + " restante(s)");
