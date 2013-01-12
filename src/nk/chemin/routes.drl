@@ -59,6 +59,17 @@ then
 	update($dr);
 end
 
+rule "Addition"
+when
+	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9]+\\+[0-9]+") 
+then
+	String valeur = $dr.getQueryString();
+	int pPos = valeur.indexOf("+");
+	int reponse = Integer.parseInt(valeur.substring(2, pPos), 10) + Integer.parseInt(valeur.substring(pPos + 1), 10); 
+	$dr.renvoieChaine(String.valueOf(reponse));
+	update($dr);
+end 
+
 rule "Question inconnue"
 salience -1
 when
@@ -83,7 +94,7 @@ rule "Assistance"
 when
 	$dr : DecisionRoutage(decide == false, path matches "/assistance/.*")
 then
-	$dr.include();
+	$dr.chain();
 	update($dr);
 end	
 

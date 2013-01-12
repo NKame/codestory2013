@@ -61,5 +61,8 @@ public class CaptureServlet extends HttpServlet {
 		demande.entetes = entetes;
 
 		stocke(getServletContext(), demande);
+		
+		// plus propre de répondre en 404 dans ce cas
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
 }

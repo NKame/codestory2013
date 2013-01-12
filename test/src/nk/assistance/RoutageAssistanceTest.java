@@ -34,7 +34,6 @@ public class RoutageAssistanceTest {
 		agent.roule(dr);
 
 		Assert.assertTrue(dr.isDecide());
-		Assert.assertEquals(1, dr.getTypeRoutage());
-		Assert.assertEquals(dr.getPath(), dr.getTargetPath());
+		Assert.assertEquals(3, dr.getTypeRoutage());
 	}
 }

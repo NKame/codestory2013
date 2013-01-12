@@ -10,10 +10,11 @@ import java.util.Map;
 public class DecisionRoutage {
 	private boolean decide = false;
 	private String path;
+	private String queryString;
 	private String methode;
 
 	/**
-	 * 0 - inconnu, 1 - interne application, 2 - redirect permanent
+	 * 0 - inconnu, 1 - interne application, 2 - redirect permanent, 3 - on suit la chaîne
 	 */
 	private int typeRoutage = 0;
 	private String typeMIME = "text/html";
@@ -51,10 +52,9 @@ public class DecisionRoutage {
 	/**
 	 * On continue comme si de rien n'était.
 	 */
-	public void include() {
+	public void chain() {
 		decide = true;
-		targetPath = path;
-		typeRoutage = 1;
+		typeRoutage = 3;
 	}
 	
 	public void redirectPermanent(String uriAbsolue) {
@@ -69,6 +69,14 @@ public class DecisionRoutage {
 		targetPath = "/WEB-INF/jsp/json.jsp";
 		contexte = new HashMap<String, Object>();
 		contexte.put("json", o);
+	}
+	
+	public void renvoieChaine(String chaine) {
+		decide = true;
+		typeRoutage = 1;
+		targetPath = "/WEB-INF/jsp/chaine.jsp";
+		contexte = new HashMap<String, Object>();
+		contexte.put("chaine", chaine);		
 	}
 	
 	public boolean isDecide() {
@@ -126,4 +134,12 @@ public class DecisionRoutage {
 	public void setContexte(Map<String, Object> contexte) {
 		this.contexte = contexte;
 	}
+
+	public String getQueryString() {
+		return queryString;
+	}
+
+	public void setQueryString(String queryString) {
+		this.queryString = queryString;
+	}	
 }

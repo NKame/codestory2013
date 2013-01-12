@@ -38,6 +38,7 @@ public class RouteurFilter implements Filter {
 
 		final DecisionRoutage dec = new DecisionRoutage();
 		dec.setPath(request.getRequestURI());
+		dec.setQueryString(request.getQueryString());
 		final Collection<Parametre> parametres = Parametre.derouleRequete(request.getParameterMap());
 
 		agent.roule(dec, parametres);
@@ -62,6 +63,11 @@ public class RouteurFilter implements Filter {
 			response.addHeader("Location", dec.getTargetPath());
 		}
 			break;
+		case 3:
+			// si on chainait ?
+		{
+			chain.doFilter(sRequest, sResponse);
+		}
 		default:
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			break;
