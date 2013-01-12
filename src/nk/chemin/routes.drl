@@ -68,6 +68,44 @@ then
 	int reponse = Integer.parseInt(valeur.substring(2, pPos), 10) + Integer.parseInt(valeur.substring(pPos + 1), 10); 
 	$dr.renvoieChaine(String.valueOf(reponse));
 	update($dr);
+end
+
+rule "Soustraction"
+when
+	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9]+-[0-9]+") 
+then
+	String valeur = $dr.getQueryString();
+	int pPos = valeur.indexOf("-");
+	int reponse = Integer.parseInt(valeur.substring(2, pPos), 10) - Integer.parseInt(valeur.substring(pPos + 1), 10); 
+	$dr.renvoieChaine(String.valueOf(reponse));
+	update($dr);
+end
+
+rule "Multiplication"
+when
+	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9]+\\*[0-9]+") 
+then
+	String valeur = $dr.getQueryString();
+	int pPos = valeur.indexOf("*");
+	int reponse = Integer.parseInt(valeur.substring(2, pPos), 10) * Integer.parseInt(valeur.substring(pPos + 1), 10); 
+	$dr.renvoieChaine(String.valueOf(reponse));
+	update($dr);
+end
+
+rule "Division"
+when
+	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9]+/[0-9]+") 
+then
+	String valeur = $dr.getQueryString();
+	int pPos = valeur.indexOf("/");
+	double diviseur = Double.parseDouble(valeur.substring(pPos + 1));
+	if(diviseur != 0) {
+		double reponse = Integer.parseInt(valeur.substring(2, pPos), 10) / diviseur;		 
+		$dr.renvoieChaine(String.valueOf(reponse));
+	} else {
+		$dr.renvoieChaine("NaN");
+	}
+	update($dr);
 end 
 
 rule "Question inconnue"
