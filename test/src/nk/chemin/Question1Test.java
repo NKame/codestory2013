@@ -21,7 +21,7 @@ public class Question1Test {
 		agent.roule(dr2, new Parametre("q", "Quelle est ton adresse email"));
 
 		Assert.assertEquals(1, dr2.getTypeRoutage());
-		Assert.assertEquals("WEB-INF/static/mail.txt", dr2.getTargetPath());
+		Assert.assertEquals("/WEB-INF/static/mail.txt", dr2.getTargetPath());
 
 		disOui("Es tu abonne a la mailing list(OUI/NON)");
 		disOui("Es tu heureux de participer(OUI/NON)");
@@ -33,7 +33,7 @@ public class Question1Test {
 		agent.roule(dr, new Parametre("q", question));
 
 		Assert.assertEquals(1, dr.getTypeRoutage());
-		Assert.assertEquals("WEB-INF/static/OUI.txt", dr.getTargetPath());
+		Assert.assertEquals("/WEB-INF/static/OUI.txt", dr.getTargetPath());
 	}
 
 	@Test
@@ -42,7 +42,7 @@ public class Question1Test {
 		agent.roule(dr, new Parametre("q", "Ca va bien (OUI/NON)"));
 
 		Assert.assertEquals(1, dr.getTypeRoutage());
-		Assert.assertEquals("WEB-INF/static/NON.txt", dr.getTargetPath());
+		Assert.assertEquals("/WEB-INF/static/NON.txt", dr.getTargetPath());
 	}
 
 	@Test

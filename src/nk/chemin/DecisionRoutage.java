@@ -1,5 +1,8 @@
 package nk.chemin;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 /**
  * Plein de getter et setters, c'est la rule de draigles.
@@ -15,6 +18,11 @@ public class DecisionRoutage {
 	private int typeRoutage = 0;
 	private String typeMIME = "text/html";
 	private String targetPath;
+	
+	/**
+	 * Donnees que le routage souhaite envoyer dans les attributs de requête.
+	 */
+	private Map<String, Object> contexte;
 
 	/**
 	 * Décide de router vers une ressource statique.
@@ -24,7 +32,7 @@ public class DecisionRoutage {
 	public void resoudStatique(String chemin) {
 		decide = true;
 		// huhu
-		targetPath = "WEB-INF/static/" + chemin;
+		targetPath = "/WEB-INF/static/" + chemin;
 		typeRoutage = 1;
 	}
 
@@ -53,6 +61,14 @@ public class DecisionRoutage {
 		decide = true;
 		targetPath = uriAbsolue;
 		typeRoutage = 2;
+	}
+	
+	public void jsonDirect(Object o) {
+		decide = true;
+		typeRoutage = 1;
+		targetPath = "/WEB-INF/jsp/json.jsp";
+		contexte = new HashMap<String, Object>();
+		contexte.put("json", o);
 	}
 	
 	public boolean isDecide() {
@@ -101,5 +117,13 @@ public class DecisionRoutage {
 
 	public void setTargetPath(String targetPath) {
 		this.targetPath = targetPath;
+	}
+
+	public Map<String, Object> getContexte() {
+		return contexte;
+	}
+
+	public void setContexte(Map<String, Object> contexte) {
+		this.contexte = contexte;
 	}
 }

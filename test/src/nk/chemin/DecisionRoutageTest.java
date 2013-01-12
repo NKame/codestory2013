@@ -21,7 +21,7 @@ public class DecisionRoutageTest {
 
 		assertTrue(dr.isDecide());
 		assertEquals(1, dr.getTypeRoutage());
-		assertEquals("WEB-INF/static/a.txt", dr.getTargetPath());
+		assertEquals("/WEB-INF/static/a.txt", dr.getTargetPath());
 	}
 
 	@Test
@@ -32,6 +32,6 @@ public class DecisionRoutageTest {
 
 		assertTrue(dr.isDecide());
 		assertEquals(1, dr.getTypeRoutage());
-		assertEquals("WEB-INF/static/a.truc", dr.getTargetPath());
+		assertEquals("/WEB-INF/static/a.truc", dr.getTargetPath());
 	}
 }

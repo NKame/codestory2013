@@ -13,7 +13,7 @@ public class Monnayeur {
 	 * @return
 	 */
 	public Set<PetiteMonnaie> faitLaMonnaie(int grosSous) {
-		if (grosSous >= (1 << LIMITE) - 1) {
+		if (grosSous >= (1 << LIMITE)) {
 			throw new IllegalArgumentException("Trop de grop sous !");
 		}
 		final Set<PetiteMonnaie> result = new HashSet<PetiteMonnaie>();

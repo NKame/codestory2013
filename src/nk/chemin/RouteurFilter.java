@@ -3,6 +3,7 @@ package nk.chemin;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collection;
+import java.util.Map;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
@@ -46,6 +47,11 @@ public class RouteurFilter implements Filter {
 		// routage statique
 		{
 			RequestDispatcher rd = sRequest.getRequestDispatcher(dec.getTargetPath());
+			if(dec.getContexte() != null) {
+				for(Map.Entry<String, Object> aMettre : dec.getContexte().entrySet()) {
+					request.setAttribute(aMettre.getKey(), aMettre.getValue());
+				}
+			}
 			rd.forward(sRequest, sResponse);
 		}
 			break;

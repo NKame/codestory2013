@@ -33,7 +33,11 @@ public class PetiteMonnaie {
 		return casiers[ci.ordinal()];
 	}
 
-	public int getTotal() {
+	/**
+	 * Total en protected, afin de ne pas être exporté en argonaute.
+	 * @return
+	 */
+	int getTotal() {
 		int total = 0;
 		for(CentsInfo ci : CentsInfo.values()) {
 			total += ci.getMontant() * get(ci);

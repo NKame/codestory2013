@@ -2,6 +2,7 @@ package codestory2013;
 
 import nk.chemin.DecisionRoutage;
 import nk.chemin.Parametre;
+import nk.enonces.Monnayeur
 
 rule "PremiereQuestion"
 when 
@@ -47,6 +48,16 @@ then
 	$dr.resoudStatique("OUI.txt");
 	update($dr);
 end 
+
+rule "Enonce 1"
+when
+	$dr: DecisionRoutage(decide == false, path matches "/scalaskel/change/[0-9]+")
+then
+	/* je sais, c'est monstrueux */
+	Monnayeur m = new Monnayeur();
+	$dr.jsonDirect(m.faitLaMonnaie(Integer.parseInt($dr.getPath().substring($dr.getPath().lastIndexOf("/") + 1), 10)));
+	update($dr);
+end
 
 rule "Question inconnue"
 salience -1
