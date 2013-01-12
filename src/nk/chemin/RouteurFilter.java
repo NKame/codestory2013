@@ -67,6 +67,7 @@ public class RouteurFilter implements Filter {
 			// si on chainait ?
 		{
 			chain.doFilter(sRequest, sResponse);
+			break;
 		}
 		default:
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
