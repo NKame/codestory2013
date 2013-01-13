@@ -68,6 +68,9 @@
 				<exclude name="WEB-INF/cloudbees-web.xml" />
 				<exclude name="META-INF/context.xml" />
 			</fileset>
+			<fileset dir="releng">
+				<include name="META-INF/context.xml" />
+			</fileset>
 			<classes dir="${classes}" />
 		</war>
 	</target>
