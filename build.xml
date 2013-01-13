@@ -65,6 +65,7 @@
 		<war destfile="target/ROOT.war" webxml="WebContent/WEB-INF/web.xml">
 			<fileset dir="WebContent">
 				<exclude name="WEB-INF/web.xml" />
+				<exclude name="WEB-INF/cloudbees-web.xml" />
 				<exclude name="META-INF/context.xml" />
 			</fileset>
 			<classes dir="${classes}" />
