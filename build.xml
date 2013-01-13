@@ -69,6 +69,8 @@
 			<classes dir="${classes}" />
 		</war>
 	</target>
+	
+	<target name="test_et_dist" depends="run-tests,dist" />
 
 	<target name="load-jars" depends="init-ivy">
 		<!-- Git, le système qui a du mal avec la notion de "dossier", tellement années 60 -->
