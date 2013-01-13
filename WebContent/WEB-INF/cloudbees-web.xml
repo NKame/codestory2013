@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<cloudbees-web-app xmlns="http://www.cloudbees.com/xml/webapp/1">
+	<!-- NOTE: be sure to replace CB_USERNAME, SERVERS, USERNAME, and PASSWORD 
+		with the appropriate values. -->
+	<appid>codestory/damien</appid>
+	<resource name="jdbc/codestory" auth="Container" type="javax.sql.DataSource">
+		<param name="username" value="damienb" />
+		<param name="password" value="damienb" />
+		<param name="url" value="jdbc:cloudbees://codestory" />
+	</resource>
+</cloudbees-web-app>

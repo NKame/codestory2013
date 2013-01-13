@@ -5,7 +5,6 @@ import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
 
-import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -14,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.UnavailableException;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +21,6 @@ import nk.rules.AgentDeReconaissance;
 /**
  * C'est le coeur du réseau. C'est moche un coeur.
  */
-@WebFilter(dispatcherTypes = { DispatcherType.REQUEST }, urlPatterns = { "/*" })
 public class RouteurFilter implements Filter {
 	private AgentDeReconaissance agent;
 
@@ -47,12 +44,8 @@ public class RouteurFilter implements Filter {
 		case 1:
 		// routage statique
 		{
-			RequestDispatcher rd = sRequest.getRequestDispatcher(dec.getTargetPath());
-			if(dec.getContexte() != null) {
-				for(Map.Entry<String, Object> aMettre : dec.getContexte().entrySet()) {
-					request.setAttribute(aMettre.getKey(), aMettre.getValue());
-				}
-			}
+			pushAttributs(request, dec);
+			RequestDispatcher rd = sRequest.getRequestDispatcher(dec.getTargetPath());			
 			rd.forward(sRequest, sResponse);
 		}
 			break;
@@ -66,12 +59,21 @@ public class RouteurFilter implements Filter {
 		case 3:
 			// si on chainait ?
 		{
+			pushAttributs(request, dec);
 			chain.doFilter(sRequest, sResponse);
 			break;
 		}
 		default:
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			break;
+		}
+	}
+
+	private void pushAttributs(final HttpServletRequest request, final DecisionRoutage dec) {
+		if(dec.getContexte() != null) {
+			for(Map.Entry<String, Object> aMettre : dec.getContexte().entrySet()) {
+				request.setAttribute(aMettre.getKey(), aMettre.getValue());
+			}
 		}
 	}
 

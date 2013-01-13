@@ -67,16 +67,21 @@ public class DecisionRoutage {
 		decide = true;
 		typeRoutage = 1;
 		targetPath = "/WEB-INF/jsp/json.jsp";
-		contexte = new HashMap<String, Object>();
-		contexte.put("json", o);
+		addParamContexte("json", o);
 	}
 	
 	public void renvoieChaine(String chaine) {
 		decide = true;
 		typeRoutage = 1;
 		targetPath = "/WEB-INF/jsp/chaine.jsp";
-		contexte = new HashMap<String, Object>();
-		contexte.put("chaine", chaine);		
+		addParamContexte("chaine", chaine);		
+	}
+	
+	public void addParamContexte(String k, Object v) {
+		if(contexte == null) {
+			contexte = new HashMap<String, Object>();
+		}
+		contexte.put(k, v);
 	}
 	
 	public boolean isDecide() {

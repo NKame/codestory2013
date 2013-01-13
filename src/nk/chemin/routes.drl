@@ -40,6 +40,15 @@ then
 	update($dr);
 end
 
+rule "Gestion enonces"
+when
+	$dr : DecisionRoutage(decide == false, path matches "/enonce/[0-9]+")
+then
+	$dr.chain();
+	$dr.addParamContexte("id", Integer.parseInt($dr.getPath().substring($dr.getPath().lastIndexOf("/") + 1), 10));
+	update($dr);
+end	
+
 rule "Enonce 1 recu"
 when
 	$dr : DecisionRoutage(decide == false)
