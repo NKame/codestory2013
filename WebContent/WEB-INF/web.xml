@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	id="WebApp_ID" version="3.0">
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
 	<display-name>codestory2013</display-name>
+	<listener>
+		<listener-class>nk.rdb.RdbManager</listener-class>
+	</listener>
+	<listener>
+		<listener-class>nk.assistance.AssistanceStockage</listener-class>
+	</listener>
 	<filter>
 		<filter-name>encodage</filter-name>
-		<filter-class>org.apache.catalina.filters.SetCharacterEncodingFilter</filter-class>
+		<filter-class>filters.SetCharacterEncodingFilter</filter-class>
 		<init-param>
 			<param-name>encoding</param-name>
 			<param-value>UTF-8</param-value>
@@ -21,12 +27,37 @@
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
-	<!-- le pire des deux mondes : un mélange annotation / XML, on se croirait dans Spring tellement c'est laid -->
 	<filter-mapping>
 		<filter-name>routeur</filter-name>
 		<url-pattern>/*</url-pattern>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
+	<servlet>
+		<servlet-name>enonce</servlet-name>
+		<servlet-class>nk.enonces.EnonceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>enonce</servlet-name>
+		<url-pattern>/enonce/*</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>restitutionCapture</servlet-name>
+		<servlet-class>nk.assistance.RestitutionCaptureServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>restitutionCapture</servlet-name>
+		<url-pattern>/assistance/restitutionCapture</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>capture</servlet-name>
+		<servlet-class>nk.assistance.CaptureServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>capture</servlet-name>
+		<url-pattern>/assistance/capture</url-pattern>
+	</servlet-mapping>
+	
+	
 	<resource-ref>
 		<res-ref-name>jdbc/codestory</res-ref-name>
 		<res-type>javax.sql.DataSource</res-type>

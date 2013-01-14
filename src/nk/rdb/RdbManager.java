@@ -19,7 +19,6 @@ import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 import javax.sql.DataSource;
 
 import org.stringtree.json.JSONReader;
@@ -28,7 +27,6 @@ import org.stringtree.json.JSONWriter;
 /**
  * Bon, visiblement ils sont rats sur l'envoi des énoncés, on va persister ça.
  */
-@WebListener
 public class RdbManager implements ServletContextListener {
 	private DataSource ds;
 

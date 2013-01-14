@@ -4,14 +4,12 @@ import java.io.IOException;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import nk.rdb.RdbManager;
 
-@WebServlet("/enonce/*")
 public class EnonceServlet extends HttpServlet {
 	private static final long serialVersionUID = -6586231214913008904L;
 
@@ -44,6 +42,7 @@ public class EnonceServlet extends HttpServlet {
 		// amis de la torsion bonsoir : le contenu du POST est dans la Map des paramètres...
 		// en théorie il faudrait prendre LE paramètre sans valeur qui n'est pas présent dans la query string
 		// mais bon
+		@SuppressWarnings("unchecked")
 		final Map<String, String[]> parameters = req.getParameterMap();
 		for(Map.Entry<String, String[]> param : parameters.entrySet()) {
 			// le test là est peut-êtr un tomcatisme des familles...

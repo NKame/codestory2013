@@ -7,12 +7,10 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import javax.servlet.annotation.WebListener;
 
 /**
  * Classe utilitaire pour voir ce qui a été demandé. Tout en mémoire, pour l'instant on est en interactif.
  */
-@WebListener
 public class AssistanceStockage implements ServletContextListener, Serializable {
 	private static final long serialVersionUID = -5984344822900317494L;
 
