@@ -2,7 +2,6 @@ package nk.rdb;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.reflect.Method;
 import java.sql.Clob;
@@ -49,9 +48,8 @@ public class RdbManager implements ServletContextListener {
 		if (o != null) {
 			try (Connection con = ds.getConnection();) {
 				JSONWriter writer = new JSONWriter(true);
-				final PreparedStatement ps = con
-						.prepareStatement("REPLACE objets SET valeur=?, classe=?, id=?");
-				ps.setClob(1, new StringReader(writer.write(o)));
+				final PreparedStatement ps = con.prepareStatement("REPLACE objets SET valeur=?, classe=?, id=?");
+				ps.setClob(1, new RdbClob(writer.write(o)));
 				ps.setString(2, o.getClass().getCanonicalName());
 				ps.setString(3, id);
 
@@ -105,8 +103,8 @@ public class RdbManager implements ServletContextListener {
 	}
 
 	/**
-	 * Coder dans la nuit, c'est pas bon.
-	 * Bon, là on ne gère rien, faut pas déc.... non plus.
+	 * Coder dans la nuit, c'est pas bon. Bon, là on ne gère rien, faut pas déc.... non plus.
+	 * 
 	 * @param map
 	 * @return
 	 */
@@ -118,10 +116,10 @@ public class RdbManager implements ServletContextListener {
 		try {
 			Class<C> clazz = (Class<C>) Class.forName(clazzName);
 			C result = (C) clazz.newInstance();
-			
-			for(Map.Entry<String, Object> prop : map.entrySet()) {
+
+			for (Map.Entry<String, Object> prop : map.entrySet()) {
 				final String key = prop.getKey();
-				if(!"class".equals(key) && prop.getValue() != null) {
+				if (!"class".equals(key) && prop.getValue() != null) {
 					final Method m = clazz.getMethod(setter(key), prop.getValue().getClass());
 					m.invoke(result, prop.getValue());
 				}
