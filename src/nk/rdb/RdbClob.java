@@ -24,7 +24,7 @@ public class RdbClob implements Clob {
 
 	@Override
 	public String getSubString(long pos, int length) throws SQLException {
-		return texte.substring((int) pos, (int) (pos + length));
+		return texte.substring((int) pos - 1, (int) (pos + length - 1));
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class RdbClob implements Clob {
 
 	@Override
 	public long position(String searchstr, long start) throws SQLException {
-		return texte.indexOf(searchstr, (int) start);
+		return texte.indexOf(searchstr, (int) start - 1);
 	}
 
 	@Override
@@ -82,6 +82,6 @@ public class RdbClob implements Clob {
 
 	@Override
 	public Reader getCharacterStream(long pos, long length) throws SQLException {
-		return new StringReader(texte.substring((int) pos, (int) (pos + length)));
+		return new StringReader(getSubString(pos, (int) length));
 	}
 }
