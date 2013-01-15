@@ -1,4 +1,4 @@
-<%@page import="org.stringtree.json.JSONWriter" %>
+<%@page import="org.stringtree.json.JSONWriter" session="false" %>
 <%
     response.setHeader("Accept-Ranges", "bytes");
     response.setContentType("application/json");

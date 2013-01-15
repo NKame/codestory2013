@@ -1,3 +1,4 @@
+<%@page session="false" %>
 <%
     response.setHeader("Accept-Ranges", "bytes");
     response.setContentType("text/plain");
