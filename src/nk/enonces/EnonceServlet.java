@@ -24,7 +24,9 @@ public class EnonceServlet extends HttpServlet {
 			resp.setContentType("text/vnd.daringfireball.markdown");
 			resp.setCharacterEncoding("UTF-8");
 
-			resp.getWriter().write(enonce.getContenuMarkdown());
+			if (enonce.getContenuMarkdown() != null) {
+				resp.getWriter().write(enonce.getContenuMarkdown());
+			}
 		} else {
 			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
 		}
@@ -44,9 +46,10 @@ public class EnonceServlet extends HttpServlet {
 		// mais bon
 		@SuppressWarnings("unchecked")
 		final Map<String, String[]> parameters = req.getParameterMap();
-		for(Map.Entry<String, String[]> param : parameters.entrySet()) {
+		for (Map.Entry<String, String[]> param : parameters.entrySet()) {
 			// le test là est peut-êtr un tomcatisme des familles...
-			if(param.getValue().length == 1 && "".equals(param.getValue()[0])) {
+			if (param.getValue().length == 1 && "".equals(param.getValue()[0]) && param.getKey() != null
+					&& !param.getKey().isEmpty()) {
 				// on en tient un
 				enonce.setContenuMarkdown(param.getKey());
 				break;

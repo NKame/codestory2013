@@ -17,11 +17,11 @@ public class PosteCommeUneLettre {
 		try {
 
 			// paye ton répertoire courant bien configuré
-			final String md = IO.readText(new FileInputStream("doc/enonce.1.md"));
+			final String md = IO.readText(new FileInputStream("doc/enonce.2.md"));
 			final byte[] mdBytes = md.getBytes("UTF-8");
 			
-			// URL url = new URL("http://localhost:8080/enonce/1");
-			URL url = new URL("http://damien.codestory.cloudbees.net/enonce/1");
+			URL url = new URL("http://localhost:8080/enonce/2");
+			// URL url = new URL("http://damien.codestory.cloudbees.net/enonce/2");
 
 			final HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 

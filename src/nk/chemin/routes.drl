@@ -52,7 +52,7 @@ end
 
 rule "Gestion enonces"
 when
-	$dr : DecisionRoutage(decide == false, path matches "/enonce/1") /* [0-9]+") */
+	$dr : DecisionRoutage(decide == false, path matches "/enonce/[0-9]+")
 then
 	$dr.chain();
 	$dr.addParamContexte("id", Integer.parseInt($dr.getPath().substring($dr.getPath().lastIndexOf("/") + 1), 10));
@@ -67,6 +67,15 @@ then
 	$dr.resoudStatique("OUI.txt");
 	update($dr);
 end 
+
+rule "Enonce 2 recu"
+when
+	$dr : DecisionRoutage(decide == false)
+	Parametre(nom == "q", valeur == "As tu bien recu le second enonce(OUI/NON)")
+then
+	$dr.resoudStatique("OUI.txt");
+	update($dr);
+end
 
 rule "Enonce 1"
 when
