@@ -1,9 +1,10 @@
 package nk.rdb;
 
+import static nk.rdb.AerosolEvian.rehydrate;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.lang.reflect.Method;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -91,7 +92,7 @@ public class RdbManager implements ServletContextListener {
 						nb = stream.read(tampax, 0, tampax.length);
 					}
 					Map<String, Object> map = (Map<String, Object>) reader.read(sw.toString());
-					result = construitDepuis(map);
+					result = rehydrate(map);
 				} catch (IOException e) {
 					// là je crois qu'il faut s'en taper... c'est que la base s'est barrée
 				}
@@ -100,40 +101,6 @@ public class RdbManager implements ServletContextListener {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
-	}
-
-	/**
-	 * Coder dans la nuit, c'est pas bon. Bon, là on ne gère rien, faut pas déc.... non plus.
-	 * 
-	 * @param map
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	private <C> C construitDepuis(Map<String, Object> map) {
-		String clazzName = (String) map.get("class");
-		// JSONTree stocke sous la forme "class foo.bar.Qix"
-		clazzName = clazzName.substring(clazzName.indexOf(' ') + 1);
-		try {
-			Class<C> clazz = (Class<C>) Class.forName(clazzName);
-			C result = (C) clazz.newInstance();
-
-			for (Map.Entry<String, Object> prop : map.entrySet()) {
-				final String key = prop.getKey();
-				if (!"class".equals(key) && prop.getValue() != null) {
-					final Method m = clazz.getMethod(setter(key), prop.getValue().getClass());
-					m.invoke(result, prop.getValue());
-				}
-			}
-			return result;
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	private String setter(String key) {
-		final char[] chars = key.toCharArray();
-		chars[0] = Character.toUpperCase(chars[0]);
-		return new StringBuilder("set").append(chars).toString();
 	}
 
 	public <C> boolean existe(Class<C> clazz, String id) {
