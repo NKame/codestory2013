@@ -1,7 +1,6 @@
 package nk.enonces;
 
 import java.io.IOException;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -36,25 +35,14 @@ public class EnonceServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// poussé par Drools
 		final int enonceId = (int) req.getAttribute("id");
+		final String contenu = (String) req.getAttribute("postBody");
 		final RdbManager managueur = RdbManager.instance(getServletContext());
 
 		boolean existe = managueur.existe(EnonceBean.class, String.valueOf(enonceId));
 		final EnonceBean enonce = new EnonceBean();
 
-		// amis de la torsion bonsoir : le contenu du POST est dans la Map des paramètres...
-		// en théorie il faudrait prendre LE paramètre sans valeur qui n'est pas présent dans la query string
-		// mais bon
-		@SuppressWarnings("unchecked")
-		final Map<String, String[]> parameters = req.getParameterMap();
-		for (Map.Entry<String, String[]> param : parameters.entrySet()) {
-			// le test là est peut-êtr un tomcatisme des familles...
-			if (param.getValue().length == 1 && "".equals(param.getValue()[0]) && param.getKey() != null
-					&& !param.getKey().isEmpty()) {
-				// on en tient un
-				enonce.setContenuMarkdown(param.getKey());
-				break;
-			}
-		}
+		enonce.setContenuMarkdown(contenu);
+
 		managueur.stocke(String.valueOf(enonceId), enonce);
 
 		// Cf. RFC 2616, nouveau => 201, modifié => 202, il ne se passe rien de spécial => 200

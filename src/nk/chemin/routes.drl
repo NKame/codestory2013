@@ -56,6 +56,7 @@ when
 then
 	$dr.chain();
 	$dr.addParamContexte("id", Integer.parseInt($dr.getPath().substring($dr.getPath().lastIndexOf("/") + 1), 10));
+	$dr.addParamContexte("postBody", $dr.getPostBody());
 	update($dr);
 end	
 

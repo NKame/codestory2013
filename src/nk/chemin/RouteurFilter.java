@@ -1,6 +1,7 @@
 package nk.chemin;
 
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Map;
@@ -16,6 +17,7 @@ import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import nk.assistance.IO;
 import nk.rules.AgentDeReconaissance;
 
 /**
@@ -36,6 +38,11 @@ public class RouteurFilter implements Filter {
 		final DecisionRoutage dec = new DecisionRoutage();
 		dec.setPath(request.getRequestURI());
 		dec.setQueryString(request.getQueryString());
+		String readText = IO.readText(request.getInputStream());
+		if(readText != null) {
+			readText = URLDecoder.decode(readText, request.getCharacterEncoding());
+		}
+		dec.setPostBody(readText);
 		final Collection<Parametre> parametres = Parametre.derouleRequete(request.getParameterMap());
 
 		agent.roule(dec, parametres);

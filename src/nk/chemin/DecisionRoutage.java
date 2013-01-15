@@ -12,6 +12,7 @@ public class DecisionRoutage {
 	private String path;
 	private String queryString;
 	private String methode;
+	private String postBody;
 
 	/**
 	 * 0 - inconnu, 1 - interne application, 2 - redirect permanent, 3 - on suit la chaîne
@@ -146,5 +147,13 @@ public class DecisionRoutage {
 
 	public void setQueryString(String queryString) {
 		this.queryString = queryString;
+	}
+
+	public String getPostBody() {
+		return postBody;
+	}
+	
+	public void setPostBody(String readText) {
+		this.postBody = readText;		
 	}	
 }
