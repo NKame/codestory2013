@@ -23,6 +23,29 @@
 		</copy>
 	</target>
 
+	<target name="compile-grammar" depends="-init-vars">
+		<property name="targetFolder" value="src/nk/questions/antlr" />
+		<java classname="org.antlr.Tool" classpathref="build.classpath">
+			<arg value="-o" />
+			<arg value="${targetFolder}" />
+			<arg value="src/Arithmetique.g" />
+		</java>
+		<antcall target="-refresh-eclipse">
+			<param name="folder" value="${targetFolder}" />
+		</antcall>
+	</target>
+	<target name="compile-tw" depends="-init-vars">
+		<property name="targetFolder" value="src/nk/questions/antlr" />
+		<java classname="org.antlr.Tool" classpathref="build.classpath">
+			<arg value="-o" />
+			<arg value="${targetFolder}" />
+			<arg value="src/ArithmetiqueCalc.g" />
+		</java>
+		<antcall target="-refresh-eclipse">
+			<param name="folder" value="${targetFolder}" />
+		</antcall>
+	</target>
+	
 	<target name="compile-tests" depends="compile">
 		<mkdir dir="${test_classes}" />
 		<delete>
@@ -76,7 +99,7 @@
 			<classes dir="${classes}" />
 		</war>
 	</target>
-	
+
 	<target name="test_et_dist" depends="run-tests,dist" />
 
 	<target name="load-jars" depends="init-ivy">
@@ -96,7 +119,11 @@
 			<fileset dir="releng/lib" includes="*.jar" />
 		</copy>
 	</target>
-
+	
+	<target name="-refresh-eclipse" if="eclipse.running">
+		<eclipse.refreshLocal resource="${ant.project.name}/${folder}" depth="infinite" />
+	</target>
+	
 	<target name="-init-vars">
 		<path id="run.classpath">
 			<fileset dir="${web.lib.dir}">
