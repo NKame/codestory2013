@@ -1,4 +1,4 @@
-// $ANTLR 3.5 src/Arithmetique.g 2013-01-15 02:20:04
+// $ANTLR 3.5 src/Arithmetique.g 2013-01-15 02:51:41
  package nk.questions.antlr; 
 
 import org.antlr.runtime.*;
@@ -218,62 +218,26 @@ public class ArithmetiqueLexer extends Lexer {
 		try {
 			int _type = INT;
 			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// src/Arithmetique.g:37:5: ( ( '0' .. '9' )+ )
-			// src/Arithmetique.g:37:9: ( '0' .. '9' )+
+			// src/Arithmetique.g:37:5: ( ( '-' )? ( '0' .. '9' )+ )
+			// src/Arithmetique.g:37:9: ( '-' )? ( '0' .. '9' )+
 			{
-			// src/Arithmetique.g:37:9: ( '0' .. '9' )+
-			int cnt2=0;
-			loop2:
-			while (true) {
-				int alt2=2;
-				int LA2_0 = input.LA(1);
-				if ( ((LA2_0 >= '0' && LA2_0 <= '9')) ) {
-					alt2=1;
-				}
-
-				switch (alt2) {
+			// src/Arithmetique.g:37:9: ( '-' )?
+			int alt2=2;
+			int LA2_0 = input.LA(1);
+			if ( (LA2_0=='-') ) {
+				alt2=1;
+			}
+			switch (alt2) {
 				case 1 :
-					// src/Arithmetique.g:
+					// src/Arithmetique.g:37:9: '-'
 					{
-					if ( (input.LA(1) >= '0' && input.LA(1) <= '9') ) {
-						input.consume();
-					}
-					else {
-						MismatchedSetException mse = new MismatchedSetException(null,input);
-						recover(mse);
-						throw mse;
-					}
+					match('-'); 
 					}
 					break;
 
-				default :
-					if ( cnt2 >= 1 ) break loop2;
-					EarlyExitException eee = new EarlyExitException(2, input);
-					throw eee;
-				}
-				cnt2++;
 			}
 
-			}
-
-			state.type = _type;
-			state.channel = _channel;
-		}
-		finally {
-			// do for sure before leaving
-		}
-	}
-	// $ANTLR end "INT"
-
-	// $ANTLR start "FLOAT"
-	public final void mFLOAT() throws RecognitionException {
-		try {
-			int _type = FLOAT;
-			int _channel = DEFAULT_TOKEN_CHANNEL;
-			// src/Arithmetique.g:40:7: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* )
-			// src/Arithmetique.g:40:9: ( '0' .. '9' )+ '.' ( '0' .. '9' )*
-			{
-			// src/Arithmetique.g:40:9: ( '0' .. '9' )+
+			// src/Arithmetique.g:37:13: ( '0' .. '9' )+
 			int cnt3=0;
 			loop3:
 			while (true) {
@@ -306,8 +270,27 @@ public class ArithmetiqueLexer extends Lexer {
 				cnt3++;
 			}
 
-			match('.'); 
-			// src/Arithmetique.g:40:25: ( '0' .. '9' )*
+			}
+
+			state.type = _type;
+			state.channel = _channel;
+		}
+		finally {
+			// do for sure before leaving
+		}
+	}
+	// $ANTLR end "INT"
+
+	// $ANTLR start "FLOAT"
+	public final void mFLOAT() throws RecognitionException {
+		try {
+			int _type = FLOAT;
+			int _channel = DEFAULT_TOKEN_CHANNEL;
+			// src/Arithmetique.g:40:7: ( ( '0' .. '9' )+ '.' ( '0' .. '9' )* )
+			// src/Arithmetique.g:40:9: ( '0' .. '9' )+ '.' ( '0' .. '9' )*
+			{
+			// src/Arithmetique.g:40:9: ( '0' .. '9' )+
+			int cnt4=0;
 			loop4:
 			while (true) {
 				int alt4=2;
@@ -332,7 +315,40 @@ public class ArithmetiqueLexer extends Lexer {
 					break;
 
 				default :
-					break loop4;
+					if ( cnt4 >= 1 ) break loop4;
+					EarlyExitException eee = new EarlyExitException(4, input);
+					throw eee;
+				}
+				cnt4++;
+			}
+
+			match('.'); 
+			// src/Arithmetique.g:40:25: ( '0' .. '9' )*
+			loop5:
+			while (true) {
+				int alt5=2;
+				int LA5_0 = input.LA(1);
+				if ( ((LA5_0 >= '0' && LA5_0 <= '9')) ) {
+					alt5=1;
+				}
+
+				switch (alt5) {
+				case 1 :
+					// src/Arithmetique.g:
+					{
+					if ( (input.LA(1) >= '0' && input.LA(1) <= '9') ) {
+						input.consume();
+					}
+					else {
+						MismatchedSetException mse = new MismatchedSetException(null,input);
+						recover(mse);
+						throw mse;
+					}
+					}
+					break;
+
+				default :
+					break loop5;
 				}
 			}
 
@@ -356,12 +372,12 @@ public class ArithmetiqueLexer extends Lexer {
 			// src/Arithmetique.g:44:7: ( '\\r' )? '\\n'
 			{
 			// src/Arithmetique.g:44:7: ( '\\r' )?
-			int alt5=2;
-			int LA5_0 = input.LA(1);
-			if ( (LA5_0=='\r') ) {
-				alt5=1;
+			int alt6=2;
+			int LA6_0 = input.LA(1);
+			if ( (LA6_0=='\r') ) {
+				alt6=1;
 			}
-			switch (alt5) {
+			switch (alt6) {
 				case 1 :
 					// src/Arithmetique.g:44:7: '\\r'
 					{
@@ -392,16 +408,16 @@ public class ArithmetiqueLexer extends Lexer {
 			// src/Arithmetique.g:47:9: ( ' ' | '\\t' )+
 			{
 			// src/Arithmetique.g:47:9: ( ' ' | '\\t' )+
-			int cnt6=0;
-			loop6:
+			int cnt7=0;
+			loop7:
 			while (true) {
-				int alt6=2;
-				int LA6_0 = input.LA(1);
-				if ( (LA6_0=='\t'||LA6_0==' ') ) {
-					alt6=1;
+				int alt7=2;
+				int LA7_0 = input.LA(1);
+				if ( (LA7_0=='\t'||LA7_0==' ') ) {
+					alt7=1;
 				}
 
-				switch (alt6) {
+				switch (alt7) {
 				case 1 :
 					// src/Arithmetique.g:
 					{
@@ -417,11 +433,11 @@ public class ArithmetiqueLexer extends Lexer {
 					break;
 
 				default :
-					if ( cnt6 >= 1 ) break loop6;
-					EarlyExitException eee = new EarlyExitException(6, input);
+					if ( cnt7 >= 1 ) break loop7;
+					EarlyExitException eee = new EarlyExitException(7, input);
 					throw eee;
 				}
-				cnt6++;
+				cnt7++;
 			}
 
 			 skip(); 
@@ -439,9 +455,9 @@ public class ArithmetiqueLexer extends Lexer {
 	@Override
 	public void mTokens() throws RecognitionException {
 		// src/Arithmetique.g:1:8: ( T__9 | T__10 | T__11 | T__12 | T__13 | T__14 | ID | INT | FLOAT | NEWLINE | WS )
-		int alt7=11;
-		alt7 = dfa7.predict(input);
-		switch (alt7) {
+		int alt8=11;
+		alt8 = dfa8.predict(input);
+		switch (alt8) {
 			case 1 :
 				// src/Arithmetique.g:1:10: T__9
 				{
@@ -524,64 +540,66 @@ public class ArithmetiqueLexer extends Lexer {
 	}
 
 
-	protected DFA7 dfa7 = new DFA7(this);
-	static final String DFA7_eotS =
-		"\10\uffff\1\13\4\uffff";
-	static final String DFA7_eofS =
-		"\15\uffff";
-	static final String DFA7_minS =
-		"\1\11\7\uffff\1\56\4\uffff";
-	static final String DFA7_maxS =
-		"\1\172\7\uffff\1\71\4\uffff";
-	static final String DFA7_acceptS =
-		"\1\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\uffff\1\12\1\13\1\10\1\11";
-	static final String DFA7_specialS =
-		"\15\uffff}>";
-	static final String[] DFA7_transitionS = {
+	protected DFA8 dfa8 = new DFA8(this);
+	static final String DFA8_eotS =
+		"\5\uffff\1\13\2\uffff\1\14\5\uffff";
+	static final String DFA8_eofS =
+		"\16\uffff";
+	static final String DFA8_minS =
+		"\1\11\4\uffff\1\60\2\uffff\1\56\5\uffff";
+	static final String DFA8_maxS =
+		"\1\172\4\uffff\1\71\2\uffff\1\71\5\uffff";
+	static final String DFA8_acceptS =
+		"\1\uffff\1\1\1\2\1\3\1\4\1\uffff\1\6\1\7\1\uffff\1\12\1\13\1\5\1\10\1"+
+		"\11";
+	static final String DFA8_specialS =
+		"\16\uffff}>";
+	static final String[] DFA8_transitionS = {
 			"\1\12\1\11\2\uffff\1\11\22\uffff\1\12\7\uffff\1\1\1\2\1\3\1\4\1\uffff"+
 			"\1\5\1\uffff\1\6\12\10\7\uffff\32\7\6\uffff\32\7",
 			"",
 			"",
 			"",
 			"",
+			"\12\14",
 			"",
 			"",
+			"\1\15\1\uffff\12\10",
 			"",
-			"\1\14\1\uffff\12\10",
 			"",
 			"",
 			"",
 			""
 	};
 
-	static final short[] DFA7_eot = DFA.unpackEncodedString(DFA7_eotS);
-	static final short[] DFA7_eof = DFA.unpackEncodedString(DFA7_eofS);
-	static final char[] DFA7_min = DFA.unpackEncodedStringToUnsignedChars(DFA7_minS);
-	static final char[] DFA7_max = DFA.unpackEncodedStringToUnsignedChars(DFA7_maxS);
-	static final short[] DFA7_accept = DFA.unpackEncodedString(DFA7_acceptS);
-	static final short[] DFA7_special = DFA.unpackEncodedString(DFA7_specialS);
-	static final short[][] DFA7_transition;
+	static final short[] DFA8_eot = DFA.unpackEncodedString(DFA8_eotS);
+	static final short[] DFA8_eof = DFA.unpackEncodedString(DFA8_eofS);
+	static final char[] DFA8_min = DFA.unpackEncodedStringToUnsignedChars(DFA8_minS);
+	static final char[] DFA8_max = DFA.unpackEncodedStringToUnsignedChars(DFA8_maxS);
+	static final short[] DFA8_accept = DFA.unpackEncodedString(DFA8_acceptS);
+	static final short[] DFA8_special = DFA.unpackEncodedString(DFA8_specialS);
+	static final short[][] DFA8_transition;
 
 	static {
-		int numStates = DFA7_transitionS.length;
-		DFA7_transition = new short[numStates][];
+		int numStates = DFA8_transitionS.length;
+		DFA8_transition = new short[numStates][];
 		for (int i=0; i<numStates; i++) {
-			DFA7_transition[i] = DFA.unpackEncodedString(DFA7_transitionS[i]);
+			DFA8_transition[i] = DFA.unpackEncodedString(DFA8_transitionS[i]);
 		}
 	}
 
-	protected class DFA7 extends DFA {
+	protected class DFA8 extends DFA {
 
-		public DFA7(BaseRecognizer recognizer) {
+		public DFA8(BaseRecognizer recognizer) {
 			this.recognizer = recognizer;
-			this.decisionNumber = 7;
-			this.eot = DFA7_eot;
-			this.eof = DFA7_eof;
-			this.min = DFA7_min;
-			this.max = DFA7_max;
-			this.accept = DFA7_accept;
-			this.special = DFA7_special;
-			this.transition = DFA7_transition;
+			this.decisionNumber = 8;
+			this.eot = DFA8_eot;
+			this.eof = DFA8_eof;
+			this.min = DFA8_min;
+			this.max = DFA8_max;
+			this.accept = DFA8_accept;
+			this.special = DFA8_special;
+			this.transition = DFA8_transition;
 		}
 		@Override
 		public String getDescription() {

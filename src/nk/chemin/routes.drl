@@ -80,7 +80,7 @@ end
 
 rule "Arithmetique"
 when
-	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9()+/*-,]+") 
+	$dr : DecisionRoutage(decide == false, queryString matches "q=[-0-9()+/*,]+") 
 then
 	String valeur = $dr.getQueryString();
 	ANTLRStringStream input = new ANTLRStringStream(valeur.substring(2).replace(",","."));
