@@ -3,6 +3,14 @@ package codestory2013;
 import nk.chemin.DecisionRoutage;
 import nk.chemin.Parametre;
 import nk.enonces.Monnayeur
+import nk.questions.antlr.ArithmetiqueLexer;
+import nk.questions.antlr.ArithmetiqueParser;
+import nk.questions.antlr.ArithmetiqueCalc;
+import org.antlr.runtime.ANTLRStringStream;
+import org.antlr.runtime.CommonTokenStream;
+import org.antlr.runtime.RecognitionException;
+import org.antlr.runtime.tree.CommonTree;
+import org.antlr.runtime.tree.CommonTreeNodeStream;
 
 rule "PremiereQuestion"
 when 
@@ -68,54 +76,22 @@ then
 	update($dr);
 end
 
-rule "Addition"
+rule "Arithmetique"
 when
-	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9]+\\+[0-9]+") 
+	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9()+/*-]+") 
 then
 	String valeur = $dr.getQueryString();
-	int pPos = valeur.indexOf("+");
-	int reponse = Integer.parseInt(valeur.substring(2, pPos), 10) + Integer.parseInt(valeur.substring(pPos + 1), 10); 
-	$dr.renvoieChaine(String.valueOf(reponse));
+	ANTLRStringStream input = new ANTLRStringStream(valeur.substring(2));
+	ArithmetiqueLexer lexer = new ArithmetiqueLexer(input);
+	CommonTokenStream tokens = new CommonTokenStream(lexer);
+	ArithmetiqueParser parser = new ArithmetiqueParser(tokens);
+	CommonTree t = (CommonTree) parser.prog().getTree();
+
+	CommonTreeNodeStream nodes = new CommonTreeNodeStream(t);
+	ArithmetiqueCalc evaluator = new ArithmetiqueCalc(nodes);
+	$dr.renvoieChaine(String.valueOf(evaluator.prog()));
 	update($dr);
 end
-
-rule "Soustraction"
-when
-	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9]+-[0-9]+") 
-then
-	String valeur = $dr.getQueryString();
-	int pPos = valeur.indexOf("-");
-	int reponse = Integer.parseInt(valeur.substring(2, pPos), 10) - Integer.parseInt(valeur.substring(pPos + 1), 10); 
-	$dr.renvoieChaine(String.valueOf(reponse));
-	update($dr);
-end
-
-rule "Multiplication"
-when
-	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9]+\\*[0-9]+") 
-then
-	String valeur = $dr.getQueryString();
-	int pPos = valeur.indexOf("*");
-	int reponse = Integer.parseInt(valeur.substring(2, pPos), 10) * Integer.parseInt(valeur.substring(pPos + 1), 10); 
-	$dr.renvoieChaine(String.valueOf(reponse));
-	update($dr);
-end
-
-rule "Division"
-when
-	$dr : DecisionRoutage(decide == false, queryString matches "q=[0-9]+/[0-9]+") 
-then
-	String valeur = $dr.getQueryString();
-	int pPos = valeur.indexOf("/");
-	double diviseur = Double.parseDouble(valeur.substring(pPos + 1));
-	if(diviseur != 0) {
-		double reponse = Integer.parseInt(valeur.substring(2, pPos), 10) / diviseur;		 
-		$dr.renvoieChaine(String.valueOf(reponse));
-	} else {
-		$dr.renvoieChaine("NaN");
-	}
-	update($dr);
-end 
 
 rule "Question inconnue"
 salience -1

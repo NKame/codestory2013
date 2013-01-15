@@ -41,7 +41,7 @@ public class Question1Test {
 		assertTrue(dr.getContexte() != null);
 		assertTrue(dr.getContexte().size() == 1);
 		assertTrue(dr.getContexte().containsKey("chaine"));
-		assertEquals("9", dr.getContexte().get("chaine"));
+		assertEquals("9.0", dr.getContexte().get("chaine"));
 	}
 
 	private void disOui(String question) {
