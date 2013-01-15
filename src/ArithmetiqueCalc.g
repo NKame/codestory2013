@@ -5,16 +5,19 @@ options {
     ASTLabelType=CommonTree;
 }
 
-@header { package nk.questions.antlr; }
+@header { 
+	package nk.questions.antlr;
+	import java.math.BigDecimal; 
+}
 
-prog returns [double value]: expr { $value = $expr.value; }
+prog returns [BigDecimal value]: expr { $value = $expr.value; }
 	;
 
-expr returns [double value]
-    :   ^('+' a=expr b=expr)       { $value = $a.value + $b.value; }
-    |   ^('-' a=expr b=expr)       { $value = $a.value - $b.value; }
-    |   ^('*' a=expr b=expr)       { $value = $a.value * $b.value; }
-    |   ^('/' a=expr b=expr)       { $value = $a.value / $b.value; }
-    |   INT                        { $value = java.lang.Double.parseDouble($INT.text); }
-    |   FLOAT                      { $value = java.lang.Double.parseDouble($FLOAT.text); }
+expr returns [BigDecimal value]
+    :   ^('+' a=expr b=expr)       { $value = $a.value.add($b.value); }
+    |   ^('-' a=expr b=expr)       { $value = $a.value.subtract($b.value); }
+    |   ^('*' a=expr b=expr)       { $value = $a.value.multiply($b.value); }
+    |   ^('/' a=expr b=expr)       { $value = $a.value.divide($b.value); }
+    |   INT                        { $value = new BigDecimal($INT.text); }
+    |   FLOAT                      { $value = new BigDecimal($FLOAT.text); }
     ;

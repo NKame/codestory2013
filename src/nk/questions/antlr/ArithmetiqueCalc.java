@@ -1,5 +1,8 @@
-// $ANTLR 3.5 src/ArithmetiqueCalc.g 2013-01-15 02:21:08
- package nk.questions.antlr; 
+// $ANTLR 3.5 src/ArithmetiqueCalc.g 2013-01-15 02:39:30
+ 
+	package nk.questions.antlr;
+	import java.math.BigDecimal; 
+
 
 import org.antlr.runtime.*;
 import org.antlr.runtime.tree.*;
@@ -47,16 +50,16 @@ public class ArithmetiqueCalc extends TreeParser {
 
 
 	// $ANTLR start "prog"
-	// src/ArithmetiqueCalc.g:10:1: prog returns [double value] : expr ;
-	public final double prog() throws RecognitionException {
-		double value = 0.0;
+	// src/ArithmetiqueCalc.g:13:1: prog returns [BigDecimal value] : expr ;
+	public final BigDecimal prog() throws RecognitionException {
+		BigDecimal value = null;
 
 
-		double expr1 =0.0;
+		BigDecimal expr1 =null;
 
 		try {
-			// src/ArithmetiqueCalc.g:10:28: ( expr )
-			// src/ArithmetiqueCalc.g:10:30: expr
+			// src/ArithmetiqueCalc.g:13:32: ( expr )
+			// src/ArithmetiqueCalc.g:13:34: expr
 			{
 			pushFollow(FOLLOW_expr_in_prog44);
 			expr1=expr();
@@ -80,18 +83,18 @@ public class ArithmetiqueCalc extends TreeParser {
 
 
 	// $ANTLR start "expr"
-	// src/ArithmetiqueCalc.g:13:1: expr returns [double value] : ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT | FLOAT );
-	public final double expr() throws RecognitionException {
-		double value = 0.0;
+	// src/ArithmetiqueCalc.g:16:1: expr returns [BigDecimal value] : ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT | FLOAT );
+	public final BigDecimal expr() throws RecognitionException {
+		BigDecimal value = null;
 
 
 		CommonTree INT2=null;
 		CommonTree FLOAT3=null;
-		double a =0.0;
-		double b =0.0;
+		BigDecimal a =null;
+		BigDecimal b =null;
 
 		try {
-			// src/ArithmetiqueCalc.g:14:5: ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT | FLOAT )
+			// src/ArithmetiqueCalc.g:17:5: ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT | FLOAT )
 			int alt1=6;
 			switch ( input.LA(1) ) {
 			case 12:
@@ -131,7 +134,7 @@ public class ArithmetiqueCalc extends TreeParser {
 			}
 			switch (alt1) {
 				case 1 :
-					// src/ArithmetiqueCalc.g:14:9: ^( '+' a= expr b= expr )
+					// src/ArithmetiqueCalc.g:17:9: ^( '+' a= expr b= expr )
 					{
 					match(input,12,FOLLOW_12_in_expr67); 
 					match(input, Token.DOWN, null); 
@@ -145,11 +148,11 @@ public class ArithmetiqueCalc extends TreeParser {
 
 					match(input, Token.UP, null); 
 
-					 value = a + b; 
+					 value = a.add(b); 
 					}
 					break;
 				case 2 :
-					// src/ArithmetiqueCalc.g:15:9: ^( '-' a= expr b= expr )
+					// src/ArithmetiqueCalc.g:18:9: ^( '-' a= expr b= expr )
 					{
 					match(input,13,FOLLOW_13_in_expr95); 
 					match(input, Token.DOWN, null); 
@@ -163,11 +166,11 @@ public class ArithmetiqueCalc extends TreeParser {
 
 					match(input, Token.UP, null); 
 
-					 value = a - b; 
+					 value = a.subtract(b); 
 					}
 					break;
 				case 3 :
-					// src/ArithmetiqueCalc.g:16:9: ^( '*' a= expr b= expr )
+					// src/ArithmetiqueCalc.g:19:9: ^( '*' a= expr b= expr )
 					{
 					match(input,11,FOLLOW_11_in_expr123); 
 					match(input, Token.DOWN, null); 
@@ -181,11 +184,11 @@ public class ArithmetiqueCalc extends TreeParser {
 
 					match(input, Token.UP, null); 
 
-					 value = a * b; 
+					 value = a.multiply(b); 
 					}
 					break;
 				case 4 :
-					// src/ArithmetiqueCalc.g:17:9: ^( '/' a= expr b= expr )
+					// src/ArithmetiqueCalc.g:20:9: ^( '/' a= expr b= expr )
 					{
 					match(input,14,FOLLOW_14_in_expr151); 
 					match(input, Token.DOWN, null); 
@@ -199,21 +202,21 @@ public class ArithmetiqueCalc extends TreeParser {
 
 					match(input, Token.UP, null); 
 
-					 value = a / b; 
+					 value = a.divide(b); 
 					}
 					break;
 				case 5 :
-					// src/ArithmetiqueCalc.g:18:9: INT
+					// src/ArithmetiqueCalc.g:21:9: INT
 					{
 					INT2=(CommonTree)match(input,INT,FOLLOW_INT_in_expr178); 
-					 value = java.lang.Double.parseDouble((INT2!=null?INT2.getText():null)); 
+					 value = new BigDecimal((INT2!=null?INT2.getText():null)); 
 					}
 					break;
 				case 6 :
-					// src/ArithmetiqueCalc.g:19:9: FLOAT
+					// src/ArithmetiqueCalc.g:22:9: FLOAT
 					{
 					FLOAT3=(CommonTree)match(input,FLOAT,FOLLOW_FLOAT_in_expr213); 
-					 value = java.lang.Double.parseDouble((FLOAT3!=null?FLOAT3.getText():null)); 
+					 value = new BigDecimal((FLOAT3!=null?FLOAT3.getText():null)); 
 					}
 					break;
 
