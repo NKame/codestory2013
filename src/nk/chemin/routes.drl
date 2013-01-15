@@ -98,6 +98,16 @@ then
 	update($dr);
 end
 
+rule "Sale nuit"
+when
+	$dr : DecisionRoutage(decide == false)
+	Parametre(nom == "q", valeur == "As tu passe une bonne nuit malgre les bugs de l etape precedente(PAS_TOP/BOF/QUELS_BUGS)")
+then
+	$dr.renvoieChaine("PAS_TOP");
+	update($dr);
+end
+
+
 rule "Question inconnue"
 salience -1
 when
