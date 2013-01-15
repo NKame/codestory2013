@@ -89,7 +89,11 @@ then
 
 	CommonTreeNodeStream nodes = new CommonTreeNodeStream(t);
 	ArithmetiqueCalc evaluator = new ArithmetiqueCalc(nodes);
-	$dr.renvoieChaine(String.valueOf(evaluator.prog()));
+	String result = String.valueOf(evaluator.prog());
+	if(result.endsWith(".0")) {
+		result = result.substring(0, result.length() - 2);
+	}
+	$dr.renvoieChaine(result);
 	update($dr);
 end
 
