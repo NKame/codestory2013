@@ -1,4 +1,4 @@
-// $ANTLR 3.5 src/Arithmetique.g 2013-01-15 00:33:42
+// $ANTLR 3.5 src/Arithmetique.g 2013-01-15 02:20:04
  package nk.questions.antlr; 
 
 import org.antlr.runtime.*;
@@ -12,20 +12,21 @@ import org.antlr.runtime.tree.*;
 @SuppressWarnings("all")
 public class ArithmetiqueParser extends Parser {
 	public static final String[] tokenNames = new String[] {
-		"<invalid>", "<EOR>", "<DOWN>", "<UP>", "ID", "INT", "NEWLINE", "WS", 
-		"'('", "')'", "'*'", "'+'", "'-'", "'/'"
+		"<invalid>", "<EOR>", "<DOWN>", "<UP>", "FLOAT", "ID", "INT", "NEWLINE", 
+		"WS", "'('", "')'", "'*'", "'+'", "'-'", "'/'"
 	};
 	public static final int EOF=-1;
-	public static final int T__8=8;
 	public static final int T__9=9;
 	public static final int T__10=10;
 	public static final int T__11=11;
 	public static final int T__12=12;
 	public static final int T__13=13;
-	public static final int ID=4;
-	public static final int INT=5;
-	public static final int NEWLINE=6;
-	public static final int WS=7;
+	public static final int T__14=14;
+	public static final int FLOAT=4;
+	public static final int ID=5;
+	public static final int INT=6;
+	public static final int NEWLINE=7;
+	public static final int WS=8;
 
 	// delegates
 	public Parser[] getDelegates() {
@@ -147,7 +148,7 @@ public class ArithmetiqueParser extends Parser {
 			while (true) {
 				int alt2=2;
 				int LA2_0 = input.LA(1);
-				if ( ((LA2_0 >= 11 && LA2_0 <= 12)) ) {
+				if ( ((LA2_0 >= 12 && LA2_0 <= 13)) ) {
 					alt2=1;
 				}
 
@@ -158,10 +159,10 @@ public class ArithmetiqueParser extends Parser {
 					// src/Arithmetique.g:20:19: ( '+' ^| '-' ^)
 					int alt1=2;
 					int LA1_0 = input.LA(1);
-					if ( (LA1_0==11) ) {
+					if ( (LA1_0==12) ) {
 						alt1=1;
 					}
-					else if ( (LA1_0==12) ) {
+					else if ( (LA1_0==13) ) {
 						alt1=2;
 					}
 
@@ -175,7 +176,7 @@ public class ArithmetiqueParser extends Parser {
 						case 1 :
 							// src/Arithmetique.g:20:20: '+' ^
 							{
-							char_literal3=(Token)match(input,11,FOLLOW_11_in_expr64); 
+							char_literal3=(Token)match(input,12,FOLLOW_12_in_expr64); 
 							char_literal3_tree = (Object)adaptor.create(char_literal3);
 							root_0 = (Object)adaptor.becomeRoot(char_literal3_tree, root_0);
 
@@ -184,7 +185,7 @@ public class ArithmetiqueParser extends Parser {
 						case 2 :
 							// src/Arithmetique.g:20:25: '-' ^
 							{
-							char_literal4=(Token)match(input,12,FOLLOW_12_in_expr67); 
+							char_literal4=(Token)match(input,13,FOLLOW_13_in_expr67); 
 							char_literal4_tree = (Object)adaptor.create(char_literal4);
 							root_0 = (Object)adaptor.becomeRoot(char_literal4_tree, root_0);
 
@@ -267,7 +268,7 @@ public class ArithmetiqueParser extends Parser {
 			while (true) {
 				int alt3=2;
 				int LA3_0 = input.LA(1);
-				if ( (LA3_0==10||LA3_0==13) ) {
+				if ( (LA3_0==11||LA3_0==14) ) {
 					alt3=1;
 				}
 
@@ -277,7 +278,7 @@ public class ArithmetiqueParser extends Parser {
 					{
 					set7=input.LT(1);
 					set7=input.LT(1);
-					if ( input.LA(1)==10||input.LA(1)==13 ) {
+					if ( input.LA(1)==11||input.LA(1)==14 ) {
 						input.consume();
 						root_0 = (Object)adaptor.becomeRoot((Object)adaptor.create(set7), root_0);
 						state.errorRecovery=false;
@@ -329,7 +330,7 @@ public class ArithmetiqueParser extends Parser {
 
 
 	// $ANTLR start "atom"
-	// src/Arithmetique.g:27:1: atom : ( INT | '(' expr ')' -> expr );
+	// src/Arithmetique.g:27:1: atom : ( INT | FLOAT | '(' expr ')' -> expr );
 	public final ArithmetiqueParser.atom_return atom() throws RecognitionException {
 		ArithmetiqueParser.atom_return retval = new ArithmetiqueParser.atom_return();
 		retval.start = input.LT(1);
@@ -337,34 +338,43 @@ public class ArithmetiqueParser extends Parser {
 		Object root_0 = null;
 
 		Token INT9=null;
-		Token char_literal10=null;
-		Token char_literal12=null;
-		ParserRuleReturnScope expr11 =null;
+		Token FLOAT10=null;
+		Token char_literal11=null;
+		Token char_literal13=null;
+		ParserRuleReturnScope expr12 =null;
 
 		Object INT9_tree=null;
-		Object char_literal10_tree=null;
-		Object char_literal12_tree=null;
+		Object FLOAT10_tree=null;
+		Object char_literal11_tree=null;
+		Object char_literal13_tree=null;
+		RewriteRuleTokenStream stream_10=new RewriteRuleTokenStream(adaptor,"token 10");
 		RewriteRuleTokenStream stream_9=new RewriteRuleTokenStream(adaptor,"token 9");
-		RewriteRuleTokenStream stream_8=new RewriteRuleTokenStream(adaptor,"token 8");
 		RewriteRuleSubtreeStream stream_expr=new RewriteRuleSubtreeStream(adaptor,"rule expr");
 
 		try {
-			// src/Arithmetique.g:27:5: ( INT | '(' expr ')' -> expr )
-			int alt4=2;
-			int LA4_0 = input.LA(1);
-			if ( (LA4_0==INT) ) {
+			// src/Arithmetique.g:27:5: ( INT | FLOAT | '(' expr ')' -> expr )
+			int alt4=3;
+			switch ( input.LA(1) ) {
+			case INT:
+				{
 				alt4=1;
-			}
-			else if ( (LA4_0==8) ) {
+				}
+				break;
+			case FLOAT:
+				{
 				alt4=2;
-			}
-
-			else {
+				}
+				break;
+			case 9:
+				{
+				alt4=3;
+				}
+				break;
+			default:
 				NoViableAltException nvae =
 					new NoViableAltException("", 4, 0, input);
 				throw nvae;
 			}
-
 			switch (alt4) {
 				case 1 :
 					// src/Arithmetique.g:27:9: INT
@@ -379,18 +389,30 @@ public class ArithmetiqueParser extends Parser {
 					}
 					break;
 				case 2 :
-					// src/Arithmetique.g:28:9: '(' expr ')'
+					// src/Arithmetique.g:28:4: FLOAT
 					{
-					char_literal10=(Token)match(input,8,FOLLOW_8_in_atom128);  
-					stream_8.add(char_literal10);
+					root_0 = (Object)adaptor.nil();
 
-					pushFollow(FOLLOW_expr_in_atom130);
-					expr11=expr();
+
+					FLOAT10=(Token)match(input,FLOAT,FOLLOW_FLOAT_in_atom123); 
+					FLOAT10_tree = (Object)adaptor.create(FLOAT10);
+					adaptor.addChild(root_0, FLOAT10_tree);
+
+					}
+					break;
+				case 3 :
+					// src/Arithmetique.g:29:9: '(' expr ')'
+					{
+					char_literal11=(Token)match(input,9,FOLLOW_9_in_atom133);  
+					stream_9.add(char_literal11);
+
+					pushFollow(FOLLOW_expr_in_atom135);
+					expr12=expr();
 					state._fsp--;
 
-					stream_expr.add(expr11.getTree());
-					char_literal12=(Token)match(input,9,FOLLOW_9_in_atom132);  
-					stream_9.add(char_literal12);
+					stream_expr.add(expr12.getTree());
+					char_literal13=(Token)match(input,10,FOLLOW_10_in_atom137);  
+					stream_10.add(char_literal13);
 
 					// AST REWRITE
 					// elements: expr
@@ -403,7 +425,7 @@ public class ArithmetiqueParser extends Parser {
 					RewriteRuleSubtreeStream stream_retval=new RewriteRuleSubtreeStream(adaptor,"rule retval",retval!=null?retval.getTree():null);
 
 					root_0 = (Object)adaptor.nil();
-					// 28:25: -> expr
+					// 29:25: -> expr
 					{
 						adaptor.addChild(root_0, stream_expr.nextTree());
 					}
@@ -438,15 +460,16 @@ public class ArithmetiqueParser extends Parser {
 
 
 	public static final BitSet FOLLOW_expr_in_prog49 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_multExpr_in_expr60 = new BitSet(new long[]{0x0000000000001802L});
-	public static final BitSet FOLLOW_11_in_expr64 = new BitSet(new long[]{0x0000000000000120L});
-	public static final BitSet FOLLOW_12_in_expr67 = new BitSet(new long[]{0x0000000000000120L});
-	public static final BitSet FOLLOW_multExpr_in_expr71 = new BitSet(new long[]{0x0000000000001802L});
-	public static final BitSet FOLLOW_atom_in_multExpr92 = new BitSet(new long[]{0x0000000000002402L});
-	public static final BitSet FOLLOW_set_in_multExpr95 = new BitSet(new long[]{0x0000000000000120L});
-	public static final BitSet FOLLOW_atom_in_multExpr102 = new BitSet(new long[]{0x0000000000002402L});
+	public static final BitSet FOLLOW_multExpr_in_expr60 = new BitSet(new long[]{0x0000000000003002L});
+	public static final BitSet FOLLOW_12_in_expr64 = new BitSet(new long[]{0x0000000000000250L});
+	public static final BitSet FOLLOW_13_in_expr67 = new BitSet(new long[]{0x0000000000000250L});
+	public static final BitSet FOLLOW_multExpr_in_expr71 = new BitSet(new long[]{0x0000000000003002L});
+	public static final BitSet FOLLOW_atom_in_multExpr92 = new BitSet(new long[]{0x0000000000004802L});
+	public static final BitSet FOLLOW_set_in_multExpr95 = new BitSet(new long[]{0x0000000000000250L});
+	public static final BitSet FOLLOW_atom_in_multExpr102 = new BitSet(new long[]{0x0000000000004802L});
 	public static final BitSet FOLLOW_INT_in_atom118 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_8_in_atom128 = new BitSet(new long[]{0x0000000000000120L});
-	public static final BitSet FOLLOW_expr_in_atom130 = new BitSet(new long[]{0x0000000000000200L});
-	public static final BitSet FOLLOW_9_in_atom132 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_FLOAT_in_atom123 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_9_in_atom133 = new BitSet(new long[]{0x0000000000000250L});
+	public static final BitSet FOLLOW_expr_in_atom135 = new BitSet(new long[]{0x0000000000000400L});
+	public static final BitSet FOLLOW_10_in_atom137 = new BitSet(new long[]{0x0000000000000002L});
 }

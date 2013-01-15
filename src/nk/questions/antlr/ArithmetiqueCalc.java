@@ -1,4 +1,4 @@
-// $ANTLR 3.5 src/ArithmetiqueCalc.g 2013-01-15 02:06:32
+// $ANTLR 3.5 src/ArithmetiqueCalc.g 2013-01-15 02:21:08
  package nk.questions.antlr; 
 
 import org.antlr.runtime.*;
@@ -10,20 +10,21 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class ArithmetiqueCalc extends TreeParser {
 	public static final String[] tokenNames = new String[] {
-		"<invalid>", "<EOR>", "<DOWN>", "<UP>", "ID", "INT", "NEWLINE", "WS", 
-		"'('", "')'", "'*'", "'+'", "'-'", "'/'"
+		"<invalid>", "<EOR>", "<DOWN>", "<UP>", "FLOAT", "ID", "INT", "NEWLINE", 
+		"WS", "'('", "')'", "'*'", "'+'", "'-'", "'/'"
 	};
 	public static final int EOF=-1;
-	public static final int T__8=8;
 	public static final int T__9=9;
 	public static final int T__10=10;
 	public static final int T__11=11;
 	public static final int T__12=12;
 	public static final int T__13=13;
-	public static final int ID=4;
-	public static final int INT=5;
-	public static final int NEWLINE=6;
-	public static final int WS=7;
+	public static final int T__14=14;
+	public static final int FLOAT=4;
+	public static final int ID=5;
+	public static final int INT=6;
+	public static final int NEWLINE=7;
+	public static final int WS=8;
 
 	// delegates
 	public TreeParser[] getDelegates() {
@@ -79,35 +80,36 @@ public class ArithmetiqueCalc extends TreeParser {
 
 
 	// $ANTLR start "expr"
-	// src/ArithmetiqueCalc.g:13:1: expr returns [double value] : ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT );
+	// src/ArithmetiqueCalc.g:13:1: expr returns [double value] : ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT | FLOAT );
 	public final double expr() throws RecognitionException {
 		double value = 0.0;
 
 
 		CommonTree INT2=null;
+		CommonTree FLOAT3=null;
 		double a =0.0;
 		double b =0.0;
 
 		try {
-			// src/ArithmetiqueCalc.g:14:5: ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT )
-			int alt1=5;
+			// src/ArithmetiqueCalc.g:14:5: ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT | FLOAT )
+			int alt1=6;
 			switch ( input.LA(1) ) {
-			case 11:
+			case 12:
 				{
 				alt1=1;
 				}
 				break;
-			case 12:
+			case 13:
 				{
 				alt1=2;
 				}
 				break;
-			case 10:
+			case 11:
 				{
 				alt1=3;
 				}
 				break;
-			case 13:
+			case 14:
 				{
 				alt1=4;
 				}
@@ -115,6 +117,11 @@ public class ArithmetiqueCalc extends TreeParser {
 			case INT:
 				{
 				alt1=5;
+				}
+				break;
+			case FLOAT:
+				{
+				alt1=6;
 				}
 				break;
 			default:
@@ -126,7 +133,7 @@ public class ArithmetiqueCalc extends TreeParser {
 				case 1 :
 					// src/ArithmetiqueCalc.g:14:9: ^( '+' a= expr b= expr )
 					{
-					match(input,11,FOLLOW_11_in_expr67); 
+					match(input,12,FOLLOW_12_in_expr67); 
 					match(input, Token.DOWN, null); 
 					pushFollow(FOLLOW_expr_in_expr71);
 					a=expr();
@@ -144,7 +151,7 @@ public class ArithmetiqueCalc extends TreeParser {
 				case 2 :
 					// src/ArithmetiqueCalc.g:15:9: ^( '-' a= expr b= expr )
 					{
-					match(input,12,FOLLOW_12_in_expr95); 
+					match(input,13,FOLLOW_13_in_expr95); 
 					match(input, Token.DOWN, null); 
 					pushFollow(FOLLOW_expr_in_expr99);
 					a=expr();
@@ -162,7 +169,7 @@ public class ArithmetiqueCalc extends TreeParser {
 				case 3 :
 					// src/ArithmetiqueCalc.g:16:9: ^( '*' a= expr b= expr )
 					{
-					match(input,10,FOLLOW_10_in_expr123); 
+					match(input,11,FOLLOW_11_in_expr123); 
 					match(input, Token.DOWN, null); 
 					pushFollow(FOLLOW_expr_in_expr127);
 					a=expr();
@@ -180,7 +187,7 @@ public class ArithmetiqueCalc extends TreeParser {
 				case 4 :
 					// src/ArithmetiqueCalc.g:17:9: ^( '/' a= expr b= expr )
 					{
-					match(input,13,FOLLOW_13_in_expr151); 
+					match(input,14,FOLLOW_14_in_expr151); 
 					match(input, Token.DOWN, null); 
 					pushFollow(FOLLOW_expr_in_expr155);
 					a=expr();
@@ -202,6 +209,13 @@ public class ArithmetiqueCalc extends TreeParser {
 					 value = java.lang.Double.parseDouble((INT2!=null?INT2.getText():null)); 
 					}
 					break;
+				case 6 :
+					// src/ArithmetiqueCalc.g:19:9: FLOAT
+					{
+					FLOAT3=(CommonTree)match(input,FLOAT,FOLLOW_FLOAT_in_expr213); 
+					 value = java.lang.Double.parseDouble((FLOAT3!=null?FLOAT3.getText():null)); 
+					}
+					break;
 
 			}
 		}
@@ -221,17 +235,18 @@ public class ArithmetiqueCalc extends TreeParser {
 
 
 	public static final BitSet FOLLOW_expr_in_prog44 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_11_in_expr67 = new BitSet(new long[]{0x0000000000000004L});
-	public static final BitSet FOLLOW_expr_in_expr71 = new BitSet(new long[]{0x0000000000003C20L});
+	public static final BitSet FOLLOW_12_in_expr67 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr71 = new BitSet(new long[]{0x0000000000007850L});
 	public static final BitSet FOLLOW_expr_in_expr75 = new BitSet(new long[]{0x0000000000000008L});
-	public static final BitSet FOLLOW_12_in_expr95 = new BitSet(new long[]{0x0000000000000004L});
-	public static final BitSet FOLLOW_expr_in_expr99 = new BitSet(new long[]{0x0000000000003C20L});
+	public static final BitSet FOLLOW_13_in_expr95 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr99 = new BitSet(new long[]{0x0000000000007850L});
 	public static final BitSet FOLLOW_expr_in_expr103 = new BitSet(new long[]{0x0000000000000008L});
-	public static final BitSet FOLLOW_10_in_expr123 = new BitSet(new long[]{0x0000000000000004L});
-	public static final BitSet FOLLOW_expr_in_expr127 = new BitSet(new long[]{0x0000000000003C20L});
+	public static final BitSet FOLLOW_11_in_expr123 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr127 = new BitSet(new long[]{0x0000000000007850L});
 	public static final BitSet FOLLOW_expr_in_expr131 = new BitSet(new long[]{0x0000000000000008L});
-	public static final BitSet FOLLOW_13_in_expr151 = new BitSet(new long[]{0x0000000000000004L});
-	public static final BitSet FOLLOW_expr_in_expr155 = new BitSet(new long[]{0x0000000000003C20L});
+	public static final BitSet FOLLOW_14_in_expr151 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr155 = new BitSet(new long[]{0x0000000000007850L});
 	public static final BitSet FOLLOW_expr_in_expr159 = new BitSet(new long[]{0x0000000000000008L});
 	public static final BitSet FOLLOW_INT_in_expr178 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_FLOAT_in_expr213 = new BitSet(new long[]{0x0000000000000002L});
 }

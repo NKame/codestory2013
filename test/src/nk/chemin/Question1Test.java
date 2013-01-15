@@ -29,7 +29,7 @@ public class Question1Test {
 		disOui("Es tu heureux de participer(OUI/NON)");
 		disOui("As tu bien recu le premier enonce(OUI/NON)");
 	}
-	
+
 	@Test
 	public void testQuestionsCalculs() {
 		DecisionRoutage dr = new DecisionRoutage();
@@ -42,10 +42,20 @@ public class Question1Test {
 		assertTrue(dr.getContexte().size() == 1);
 		assertTrue(dr.getContexte().containsKey("chaine"));
 		assertEquals("9", dr.getContexte().get("chaine"));
+		
+		dr = new DecisionRoutage();
+		dr.setQueryString("q=1,5*4");
+		agent.roule(dr);
+		assertEquals(1, dr.getTypeRoutage());
+		assertEquals("/WEB-INF/jsp/chaine.jsp", dr.getTargetPath());
+		assertTrue(dr.getContexte() != null);
+		assertTrue(dr.getContexte().size() == 1);
+		assertTrue(dr.getContexte().containsKey("chaine"));
+		assertEquals("6", dr.getContexte().get("chaine"));		
 	}
 
 	private void disOui(String question) {
-		DecisionRoutage dr = new DecisionRoutage();		
+		DecisionRoutage dr = new DecisionRoutage();
 		agent.roule(dr, new Parametre("q", question));
 
 		Assert.assertEquals(1, dr.getTypeRoutage());

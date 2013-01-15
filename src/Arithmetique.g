@@ -25,6 +25,7 @@ multExpr
     ;
 
 atom:   INT
+	| FLOAT
     |   '(' expr ')'    -> expr    
     ;
 // END:expr
@@ -35,6 +36,9 @@ ID  :   ('a'..'z'|'A'..'Z')+
 
 INT :   '0'..'9'+
     ;
+    
+FLOAT : ('0'..'9')+ '.' ('0'..'9')*
+	;
 
 NEWLINE
     :	'\r'? '\n'
