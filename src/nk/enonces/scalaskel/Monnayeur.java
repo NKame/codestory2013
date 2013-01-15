@@ -1,4 +1,4 @@
-package nk.enonces;
+package nk.enonces.scalaskel;
 
 import java.util.HashSet;
 import java.util.Set;

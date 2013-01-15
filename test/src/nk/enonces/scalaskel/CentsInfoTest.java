@@ -1,4 +1,6 @@
-package nk.enonces;
+package nk.enonces.scalaskel;
+
+import nk.enonces.scalaskel.CentsInfo;
 
 import org.junit.Assert;
 import org.junit.Test;

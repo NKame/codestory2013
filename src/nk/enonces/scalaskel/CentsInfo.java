@@ -1,4 +1,4 @@
-package nk.enonces;
+package nk.enonces.scalaskel;
 
 public enum CentsInfo {
 	// du plus grand au plus petit, parce que je le vaux bien

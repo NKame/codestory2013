@@ -1,6 +1,8 @@
-package nk.enonces;
+package nk.enonces.scalaskel;
 
 import static org.junit.Assert.*;
+
+import nk.enonces.scalaskel.MultiCompteur;
 
 import org.junit.Test;
 

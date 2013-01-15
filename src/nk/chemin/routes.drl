@@ -2,7 +2,7 @@ package codestory2013;
 
 import nk.chemin.DecisionRoutage;
 import nk.chemin.Parametre;
-import nk.enonces.Monnayeur
+import nk.enonces.scalaskel.Monnayeur
 import nk.questions.antlr.ArithmetiqueLexer;
 import nk.questions.antlr.ArithmetiqueParser;
 import nk.questions.antlr.ArithmetiqueCalc;

@@ -1,8 +1,11 @@
-package nk.enonces;
+package nk.enonces.scalaskel;
 
 import static org.junit.Assert.*;
 
 import java.util.Set;
+
+import nk.enonces.scalaskel.Monnayeur;
+import nk.enonces.scalaskel.PetiteMonnaie;
 
 import org.junit.Test;
 

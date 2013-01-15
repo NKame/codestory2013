@@ -1,4 +1,4 @@
-package nk.enonces;
+package nk.enonces.scalaskel;
 
 /**
  * Evite d'avoir à gérer des boucles imbriquées.

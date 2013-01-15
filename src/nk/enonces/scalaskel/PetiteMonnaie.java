@@ -1,4 +1,4 @@
-package nk.enonces;
+package nk.enonces.scalaskel;
 
 import java.util.Arrays;
 
