@@ -3,6 +3,7 @@ package codestory2013;
 import nk.chemin.DecisionRoutage;
 import nk.chemin.Parametre;
 import nk.enonces.scalaskel.Monnayeur
+import nk.enonces.jajascript.DarkPlanner;
 import nk.questions.antlr.ArithmetiqueLexer;
 import nk.questions.antlr.ArithmetiqueParser;
 import nk.questions.antlr.ArithmetiqueCalc;
@@ -108,6 +109,20 @@ then
 	update($dr);
 end
 
+rule "jajascript"
+when
+	$dr: DecisionRoutage(decide == false, methode == "POST", path matches "/jajascript/optimize")
+then
+	DarkPlanner dp = new DarkPlanner();
+	try {
+		$dr.jsonDirect(dp.planifieLikeAWinner($dr.getPostBody()));
+		update($dr);
+	} catch (Exception e) {
+		// beau foirage, ça va aller jusqu'à la capture
+		e.printStackTrace();
+	}	
+end
+
 rule "Sale nuit"
 when
 	$dr : DecisionRoutage(decide == false)
@@ -142,7 +157,7 @@ rule "Assistance"
 when
 	$dr : DecisionRoutage(decide == false, path matches "/assistance/.*")
 then
-	$dr.chain();
+	$dr.chain();	
 	update($dr);
 end	
 
@@ -151,6 +166,7 @@ salience -100
 when
 	$dr : DecisionRoutage(decide == false)
 then
+	$dr.addParamContexte("postBody", $dr.getPostBody());
 	$dr.resoudDynamique('/assistance/capture');
 	update($dr)
 end

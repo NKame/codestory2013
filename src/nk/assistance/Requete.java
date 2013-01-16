@@ -8,6 +8,7 @@ public class Requete {
 	public String queryString;
 	public Map<String, String[]> parametres;
 	public Map<String, String[]> entetes;
+	public String postBody;
 
 	@Override
 	public int hashCode() {

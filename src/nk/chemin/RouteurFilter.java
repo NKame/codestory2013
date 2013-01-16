@@ -38,11 +38,13 @@ public class RouteurFilter implements Filter {
 		final DecisionRoutage dec = new DecisionRoutage();
 		dec.setPath(request.getRequestURI());
 		dec.setQueryString(request.getQueryString());
+		dec.setMethode(request.getMethod());
 		String readText = IO.readText(request.getInputStream());
 		if(readText != null) {
 			readText = URLDecoder.decode(readText, request.getCharacterEncoding());
 		}
 		dec.setPostBody(readText);
+		@SuppressWarnings("unchecked")
 		final Collection<Parametre> parametres = Parametre.derouleRequete(request.getParameterMap());
 
 		agent.roule(dec, parametres);

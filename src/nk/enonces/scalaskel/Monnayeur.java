@@ -3,6 +3,8 @@ package nk.enonces.scalaskel;
 import java.util.HashSet;
 import java.util.Set;
 
+import nk.enonces.MultiCompteur;
+
 public class Monnayeur {
 	public static final short LIMITE = 8;
 

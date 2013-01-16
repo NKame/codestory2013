@@ -42,6 +42,7 @@ public class CaptureServlet extends HttpServlet {
 		demande.chemin = (String) request.getAttribute("javax.servlet.forward.request_uri");
 		demande.queryString = (String) request.getAttribute("javax.servlet.forward.query_string");
 		demande.parametres = request.getParameterMap();
+		demande.postBody = (String) request.getAttribute("postBody");
 
 		final Map<String, String[]> entetes = new HashMap<String, String[]>();
 		final Enumeration<String> enumNames = request.getHeaderNames();
