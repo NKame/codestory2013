@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,9 +35,16 @@ public class CaptureServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
 	 */
-	@SuppressWarnings("unchecked")
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
+		captureRequest(getServletContext(), request);
+
+		// plus propre de répondre en 404 dans ce cas
+		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static void captureRequest(ServletContext sc, HttpServletRequest request) {
 		final Requete demande = new Requete();
 		demande.methode = request.getMethod();
 		demande.chemin = (String) request.getAttribute("javax.servlet.forward.request_uri");
@@ -60,9 +68,6 @@ public class CaptureServlet extends HttpServlet {
 		}
 		demande.entetes = entetes;
 
-		stocke(getServletContext(), demande);
-		
-		// plus propre de répondre en 404 dans ce cas
-		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+		stocke(sc, demande);
 	}
 }

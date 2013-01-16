@@ -10,6 +10,7 @@ import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -17,6 +18,7 @@ import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import nk.assistance.CaptureServlet;
 import nk.assistance.IO;
 import nk.rules.AgentDeReconaissance;
 
@@ -25,6 +27,7 @@ import nk.rules.AgentDeReconaissance;
  */
 public class RouteurFilter implements Filter {
 	private AgentDeReconaissance agent;
+	private ServletContext sc;
 
 	public RouteurFilter() {
 	}
@@ -53,6 +56,9 @@ public class RouteurFilter implements Filter {
 		case 1:
 		// routage statique
 		{
+			if(dec.isCapture()) {
+				CaptureServlet.captureRequest(this.sc, request);
+			}
 			pushAttributs(request, dec);
 			RequestDispatcher rd = sRequest.getRequestDispatcher(dec.getTargetPath());			
 			rd.forward(sRequest, sResponse);
@@ -68,6 +74,9 @@ public class RouteurFilter implements Filter {
 		case 3:
 			// si on chainait ?
 		{
+			if(dec.isCapture()) {
+				CaptureServlet.captureRequest(this.sc, request);
+			}
 			pushAttributs(request, dec);
 			chain.doFilter(sRequest, sResponse);
 			break;
@@ -87,6 +96,7 @@ public class RouteurFilter implements Filter {
 	}
 
 	public void init(FilterConfig fConfig) throws ServletException {
+		this.sc = fConfig.getServletContext();
 		try {
 			agent = new AgentDeReconaissance(MessageFormat.format("/{0}/routes.drl", this.getClass().getPackage()
 					.getName().replaceAll("\\.", "/")));
@@ -98,6 +108,7 @@ public class RouteurFilter implements Filter {
 	public void destroy() {
 		// ça ne sert à rien, c'est juste pour rajouter des lignes de code
 		// qui vont faire baisser le taux de couverture :-D
-		agent = null;
+		this.sc = null;
+		this.agent = null;
 	}
 }

@@ -114,6 +114,7 @@ when
 	$dr: DecisionRoutage(decide == false, methode == "POST", path matches "/jajascript/optimize")
 then
 	DarkPlanner dp = new DarkPlanner();
+	$dr.setCapture(true);
 	try {
 		$dr.jsonDirect(dp.planifieLikeAWinner($dr.getPostBody()));
 		update($dr);

@@ -3,7 +3,6 @@ package nk.chemin;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Plein de getter et setters, c'est la rule de draigles.
  */
@@ -13,6 +12,7 @@ public class DecisionRoutage {
 	private String queryString;
 	private String methode;
 	private String postBody;
+	private boolean capture;
 
 	/**
 	 * 0 - inconnu, 1 - interne application, 2 - redirect permanent, 3 - on suit la chaîne
@@ -20,7 +20,7 @@ public class DecisionRoutage {
 	private int typeRoutage = 0;
 	private String typeMIME = "text/html";
 	private String targetPath;
-	
+
 	/**
 	 * Donnees que le routage souhaite envoyer dans les attributs de requête.
 	 */
@@ -49,7 +49,7 @@ public class DecisionRoutage {
 		targetPath = chemin;
 		typeRoutage = 1;
 	}
-	
+
 	/**
 	 * On continue comme si de rien n'était.
 	 */
@@ -57,34 +57,34 @@ public class DecisionRoutage {
 		decide = true;
 		typeRoutage = 3;
 	}
-	
+
 	public void redirectPermanent(String uriAbsolue) {
 		decide = true;
 		targetPath = uriAbsolue;
 		typeRoutage = 2;
 	}
-	
+
 	public void jsonDirect(Object o) {
 		decide = true;
 		typeRoutage = 1;
 		targetPath = "/WEB-INF/jsp/json.jsp";
 		addParamContexte("json", o);
 	}
-	
+
 	public void renvoieChaine(String chaine) {
 		decide = true;
 		typeRoutage = 1;
 		targetPath = "/WEB-INF/jsp/chaine.jsp";
-		addParamContexte("chaine", chaine);		
+		addParamContexte("chaine", chaine);
 	}
-	
+
 	public void addParamContexte(String k, Object v) {
-		if(contexte == null) {
+		if (contexte == null) {
 			contexte = new HashMap<String, Object>();
 		}
 		contexte.put(k, v);
 	}
-	
+
 	public boolean isDecide() {
 		return decide;
 	}
@@ -152,8 +152,16 @@ public class DecisionRoutage {
 	public String getPostBody() {
 		return postBody;
 	}
-	
+
 	public void setPostBody(String readText) {
-		this.postBody = readText;		
-	}	
+		this.postBody = readText;
+	}
+
+	public boolean isCapture() {
+		return capture;
+	}
+
+	public void setCapture(boolean capture) {
+		this.capture = capture;
+	}
 }

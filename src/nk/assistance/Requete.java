@@ -18,6 +18,7 @@ public class Requete {
 		result = prime * result + ((entetes == null) ? 0 : entetes.hashCode());
 		result = prime * result + ((methode == null) ? 0 : methode.hashCode());
 		result = prime * result + ((parametres == null) ? 0 : parametres.hashCode());
+		result = prime * result + ((postBody == null) ? 0 : postBody.hashCode());
 		result = prime * result + ((queryString == null) ? 0 : queryString.hashCode());
 		return result;
 	}
@@ -50,6 +51,11 @@ public class Requete {
 			if (other.parametres != null)
 				return false;
 		} else if (!parametres.equals(other.parametres))
+			return false;
+		if (postBody == null) {
+			if (other.postBody != null)
+				return false;
+		} else if (!postBody.equals(other.postBody))
 			return false;
 		if (queryString == null) {
 			if (other.queryString != null)
