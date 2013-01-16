@@ -1,5 +1,7 @@
 package nk.chemin;
 
+import static nk.assistance.CaptureServlet.captureRequest;
+
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.text.MessageFormat;
@@ -57,7 +59,7 @@ public class RouteurFilter implements Filter {
 		// routage statique
 		{
 			if(dec.isCapture()) {
-				CaptureServlet.captureRequest(this.sc, request);
+				captureRequest(this.sc, request, dec.getPostBody());
 			}
 			pushAttributs(request, dec);
 			RequestDispatcher rd = sRequest.getRequestDispatcher(dec.getTargetPath());			
@@ -75,7 +77,7 @@ public class RouteurFilter implements Filter {
 			// si on chainait ?
 		{
 			if(dec.isCapture()) {
-				CaptureServlet.captureRequest(this.sc, request);
+				captureRequest(this.sc, request, dec.getPostBody());
 			}
 			pushAttributs(request, dec);
 			chain.doFilter(sRequest, sResponse);

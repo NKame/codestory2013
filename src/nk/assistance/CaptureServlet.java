@@ -37,20 +37,28 @@ public class CaptureServlet extends HttpServlet {
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
-		captureRequest(getServletContext(), request);
+		captureRequest(getServletContext(), request,
+				(String) request.getAttribute("javax.servlet.forward.request_uri"),
+				(String) request.getAttribute("javax.servlet.forward.query_string"),
+				(String) request.getAttribute("postBody"));
 
 		// plus propre de répondre en 404 dans ce cas
 		response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
 
+	public static void captureRequest(ServletContext sc, HttpServletRequest request, String postBody) {
+		captureRequest(sc, request, request.getRequestURI(), request.getQueryString(), postBody);
+	}
+	
 	@SuppressWarnings("unchecked")
-	public static void captureRequest(ServletContext sc, HttpServletRequest request) {
+	protected static void captureRequest(ServletContext sc, HttpServletRequest request, String chemin,
+			String queryString, String postBody) {
 		final Requete demande = new Requete();
 		demande.methode = request.getMethod();
-		demande.chemin = (String) request.getAttribute("javax.servlet.forward.request_uri");
-		demande.queryString = (String) request.getAttribute("javax.servlet.forward.query_string");
 		demande.parametres = request.getParameterMap();
-		demande.postBody = (String) request.getAttribute("postBody");
+		demande.chemin = chemin;
+		demande.queryString = queryString;
+		demande.postBody = postBody;
 
 		final Map<String, String[]> entetes = new HashMap<String, String[]>();
 		final Enumeration<String> enumNames = request.getHeaderNames();
