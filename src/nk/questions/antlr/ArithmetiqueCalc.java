@@ -1,4 +1,4 @@
-// $ANTLR 3.5 src/ArithmetiqueCalc.g 2013-01-15 02:39:30
+// $ANTLR 3.5 src/ArithmetiqueCalc.g 2013-01-17 23:43:24
  
 	package nk.questions.antlr;
 	import java.math.BigDecimal; 
@@ -13,21 +13,20 @@ import java.util.ArrayList;
 @SuppressWarnings("all")
 public class ArithmetiqueCalc extends TreeParser {
 	public static final String[] tokenNames = new String[] {
-		"<invalid>", "<EOR>", "<DOWN>", "<UP>", "FLOAT", "ID", "INT", "NEWLINE", 
+		"<invalid>", "<EOR>", "<DOWN>", "<UP>", "NEGATE", "NEWLINE", "NUMBER", 
 		"WS", "'('", "')'", "'*'", "'+'", "'-'", "'/'"
 	};
 	public static final int EOF=-1;
+	public static final int T__8=8;
 	public static final int T__9=9;
 	public static final int T__10=10;
 	public static final int T__11=11;
 	public static final int T__12=12;
 	public static final int T__13=13;
-	public static final int T__14=14;
-	public static final int FLOAT=4;
-	public static final int ID=5;
-	public static final int INT=6;
-	public static final int NEWLINE=7;
-	public static final int WS=8;
+	public static final int NEGATE=4;
+	public static final int NEWLINE=5;
+	public static final int NUMBER=6;
+	public static final int WS=7;
 
 	// delegates
 	public TreeParser[] getDelegates() {
@@ -58,10 +57,10 @@ public class ArithmetiqueCalc extends TreeParser {
 		BigDecimal expr1 =null;
 
 		try {
-			// src/ArithmetiqueCalc.g:13:32: ( expr )
-			// src/ArithmetiqueCalc.g:13:34: expr
+			// src/ArithmetiqueCalc.g:14:2: ( expr )
+			// src/ArithmetiqueCalc.g:14:4: expr
 			{
-			pushFollow(FOLLOW_expr_in_prog44);
+			pushFollow(FOLLOW_expr_in_prog46);
 			expr1=expr();
 			state._fsp--;
 
@@ -83,46 +82,45 @@ public class ArithmetiqueCalc extends TreeParser {
 
 
 	// $ANTLR start "expr"
-	// src/ArithmetiqueCalc.g:16:1: expr returns [BigDecimal value] : ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT | FLOAT );
+	// src/ArithmetiqueCalc.g:17:1: expr returns [BigDecimal value] : ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( NEGATE a= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | NUMBER );
 	public final BigDecimal expr() throws RecognitionException {
 		BigDecimal value = null;
 
 
-		CommonTree INT2=null;
-		CommonTree FLOAT3=null;
+		CommonTree NUMBER2=null;
 		BigDecimal a =null;
 		BigDecimal b =null;
 
 		try {
-			// src/ArithmetiqueCalc.g:17:5: ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | INT | FLOAT )
+			// src/ArithmetiqueCalc.g:18:5: ( ^( '+' a= expr b= expr ) | ^( '-' a= expr b= expr ) | ^( NEGATE a= expr ) | ^( '*' a= expr b= expr ) | ^( '/' a= expr b= expr ) | NUMBER )
 			int alt1=6;
 			switch ( input.LA(1) ) {
-			case 12:
+			case 11:
 				{
 				alt1=1;
 				}
 				break;
-			case 13:
+			case 12:
 				{
 				alt1=2;
 				}
 				break;
-			case 11:
+			case NEGATE:
 				{
 				alt1=3;
 				}
 				break;
-			case 14:
+			case 10:
 				{
 				alt1=4;
 				}
 				break;
-			case INT:
+			case 13:
 				{
 				alt1=5;
 				}
 				break;
-			case FLOAT:
+			case NUMBER:
 				{
 				alt1=6;
 				}
@@ -134,15 +132,15 @@ public class ArithmetiqueCalc extends TreeParser {
 			}
 			switch (alt1) {
 				case 1 :
-					// src/ArithmetiqueCalc.g:17:9: ^( '+' a= expr b= expr )
+					// src/ArithmetiqueCalc.g:18:9: ^( '+' a= expr b= expr )
 					{
-					match(input,12,FOLLOW_12_in_expr67); 
+					match(input,11,FOLLOW_11_in_expr69); 
 					match(input, Token.DOWN, null); 
-					pushFollow(FOLLOW_expr_in_expr71);
+					pushFollow(FOLLOW_expr_in_expr73);
 					a=expr();
 					state._fsp--;
 
-					pushFollow(FOLLOW_expr_in_expr75);
+					pushFollow(FOLLOW_expr_in_expr77);
 					b=expr();
 					state._fsp--;
 
@@ -152,15 +150,15 @@ public class ArithmetiqueCalc extends TreeParser {
 					}
 					break;
 				case 2 :
-					// src/ArithmetiqueCalc.g:18:9: ^( '-' a= expr b= expr )
+					// src/ArithmetiqueCalc.g:19:9: ^( '-' a= expr b= expr )
 					{
-					match(input,13,FOLLOW_13_in_expr95); 
+					match(input,12,FOLLOW_12_in_expr91); 
 					match(input, Token.DOWN, null); 
-					pushFollow(FOLLOW_expr_in_expr99);
+					pushFollow(FOLLOW_expr_in_expr95);
 					a=expr();
 					state._fsp--;
 
-					pushFollow(FOLLOW_expr_in_expr103);
+					pushFollow(FOLLOW_expr_in_expr99);
 					b=expr();
 					state._fsp--;
 
@@ -170,15 +168,29 @@ public class ArithmetiqueCalc extends TreeParser {
 					}
 					break;
 				case 3 :
-					// src/ArithmetiqueCalc.g:19:9: ^( '*' a= expr b= expr )
+					// src/ArithmetiqueCalc.g:20:7: ^( NEGATE a= expr )
 					{
-					match(input,11,FOLLOW_11_in_expr123); 
+					match(input,NEGATE,FOLLOW_NEGATE_in_expr114); 
 					match(input, Token.DOWN, null); 
-					pushFollow(FOLLOW_expr_in_expr127);
+					pushFollow(FOLLOW_expr_in_expr118);
 					a=expr();
 					state._fsp--;
 
-					pushFollow(FOLLOW_expr_in_expr131);
+					match(input, Token.UP, null); 
+
+					 value = a.negate(); 
+					}
+					break;
+				case 4 :
+					// src/ArithmetiqueCalc.g:21:9: ^( '*' a= expr b= expr )
+					{
+					match(input,10,FOLLOW_10_in_expr140); 
+					match(input, Token.DOWN, null); 
+					pushFollow(FOLLOW_expr_in_expr144);
+					a=expr();
+					state._fsp--;
+
+					pushFollow(FOLLOW_expr_in_expr148);
 					b=expr();
 					state._fsp--;
 
@@ -187,16 +199,16 @@ public class ArithmetiqueCalc extends TreeParser {
 					 value = a.multiply(b); 
 					}
 					break;
-				case 4 :
-					// src/ArithmetiqueCalc.g:20:9: ^( '/' a= expr b= expr )
+				case 5 :
+					// src/ArithmetiqueCalc.g:22:9: ^( '/' a= expr b= expr )
 					{
-					match(input,14,FOLLOW_14_in_expr151); 
+					match(input,13,FOLLOW_13_in_expr165); 
 					match(input, Token.DOWN, null); 
-					pushFollow(FOLLOW_expr_in_expr155);
+					pushFollow(FOLLOW_expr_in_expr169);
 					a=expr();
 					state._fsp--;
 
-					pushFollow(FOLLOW_expr_in_expr159);
+					pushFollow(FOLLOW_expr_in_expr173);
 					b=expr();
 					state._fsp--;
 
@@ -205,18 +217,11 @@ public class ArithmetiqueCalc extends TreeParser {
 					 value = a.divide(b); 
 					}
 					break;
-				case 5 :
-					// src/ArithmetiqueCalc.g:21:9: INT
-					{
-					INT2=(CommonTree)match(input,INT,FOLLOW_INT_in_expr178); 
-					 value = new BigDecimal((INT2!=null?INT2.getText():null)); 
-					}
-					break;
 				case 6 :
-					// src/ArithmetiqueCalc.g:22:9: FLOAT
+					// src/ArithmetiqueCalc.g:23:9: NUMBER
 					{
-					FLOAT3=(CommonTree)match(input,FLOAT,FOLLOW_FLOAT_in_expr213); 
-					 value = new BigDecimal((FLOAT3!=null?FLOAT3.getText():null)); 
+					NUMBER2=(CommonTree)match(input,NUMBER,FOLLOW_NUMBER_in_expr189); 
+					 value = new BigDecimal((NUMBER2!=null?NUMBER2.getText():null)); 
 					}
 					break;
 
@@ -237,19 +242,20 @@ public class ArithmetiqueCalc extends TreeParser {
 
 
 
-	public static final BitSet FOLLOW_expr_in_prog44 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_12_in_expr67 = new BitSet(new long[]{0x0000000000000004L});
-	public static final BitSet FOLLOW_expr_in_expr71 = new BitSet(new long[]{0x0000000000007850L});
-	public static final BitSet FOLLOW_expr_in_expr75 = new BitSet(new long[]{0x0000000000000008L});
-	public static final BitSet FOLLOW_13_in_expr95 = new BitSet(new long[]{0x0000000000000004L});
-	public static final BitSet FOLLOW_expr_in_expr99 = new BitSet(new long[]{0x0000000000007850L});
-	public static final BitSet FOLLOW_expr_in_expr103 = new BitSet(new long[]{0x0000000000000008L});
-	public static final BitSet FOLLOW_11_in_expr123 = new BitSet(new long[]{0x0000000000000004L});
-	public static final BitSet FOLLOW_expr_in_expr127 = new BitSet(new long[]{0x0000000000007850L});
-	public static final BitSet FOLLOW_expr_in_expr131 = new BitSet(new long[]{0x0000000000000008L});
-	public static final BitSet FOLLOW_14_in_expr151 = new BitSet(new long[]{0x0000000000000004L});
-	public static final BitSet FOLLOW_expr_in_expr155 = new BitSet(new long[]{0x0000000000007850L});
-	public static final BitSet FOLLOW_expr_in_expr159 = new BitSet(new long[]{0x0000000000000008L});
-	public static final BitSet FOLLOW_INT_in_expr178 = new BitSet(new long[]{0x0000000000000002L});
-	public static final BitSet FOLLOW_FLOAT_in_expr213 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_expr_in_prog46 = new BitSet(new long[]{0x0000000000000002L});
+	public static final BitSet FOLLOW_11_in_expr69 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr73 = new BitSet(new long[]{0x0000000000003C50L});
+	public static final BitSet FOLLOW_expr_in_expr77 = new BitSet(new long[]{0x0000000000000008L});
+	public static final BitSet FOLLOW_12_in_expr91 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr95 = new BitSet(new long[]{0x0000000000003C50L});
+	public static final BitSet FOLLOW_expr_in_expr99 = new BitSet(new long[]{0x0000000000000008L});
+	public static final BitSet FOLLOW_NEGATE_in_expr114 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr118 = new BitSet(new long[]{0x0000000000000008L});
+	public static final BitSet FOLLOW_10_in_expr140 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr144 = new BitSet(new long[]{0x0000000000003C50L});
+	public static final BitSet FOLLOW_expr_in_expr148 = new BitSet(new long[]{0x0000000000000008L});
+	public static final BitSet FOLLOW_13_in_expr165 = new BitSet(new long[]{0x0000000000000004L});
+	public static final BitSet FOLLOW_expr_in_expr169 = new BitSet(new long[]{0x0000000000003C50L});
+	public static final BitSet FOLLOW_expr_in_expr173 = new BitSet(new long[]{0x0000000000000008L});
+	public static final BitSet FOLLOW_NUMBER_in_expr189 = new BitSet(new long[]{0x0000000000000002L});
 }

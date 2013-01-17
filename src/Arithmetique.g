@@ -14,30 +14,32 @@ options {
         }
 }
 
-prog: expr
+prog
+	:	expr
 	;
 
-expr:   multExpr (('+'^|'-'^) multExpr)*
+expr:   multExpr (('+'|'-')^ multExpr)*
     ;
 
 multExpr
-    :   atom (('*'|'/')^ atom)*
+    :   unary (('*'|'/')^ unary)*
     ;
 
-atom:   INT
-	| FLOAT
+unary
+	: '+' atom -> atom
+	| '-' atom -> ^(NEGATE atom)
+	| atom
+	;	
+
+atom
+	:   NUMBER
     |   '(' expr ')'    -> expr    
     ;
-// END:expr
-
-// START:tokens
-ID  :   ('a'..'z'|'A'..'Z')+
+    
+NUMBER : ('0'..'9')+ ('.' ('0'..'9')*)?
 	;
 
-INT :   '-'?'0'..'9'+
-    ;
-    
-FLOAT : ('0'..'9')+ '.' ('0'..'9')*
+NEGATE	:	'¤'
 	;
 
 NEWLINE
@@ -46,6 +48,3 @@ NEWLINE
 
 WS  :   (' '|'\t')+ { skip(); }
 	;
-
-
-
