@@ -14,12 +14,12 @@ import nk.enonces.MultiCompteur;
 import org.stringtree.json.JSONReader;
 
 public class DarkPlanner {
-	
+
 	public Planning planifieLikeAWinner(final String jsonText) {
 		final List<Trajet> trajetsBruts = chargeTexteJSON(jsonText);
 		final List<Trajet> trajetsFiltres = filtre(trajetsBruts);
 		return resoud(trajetsFiltres);
-	}	
+	}
 
 	protected List<Trajet> chargeTexteJSON(final String jsonText) {
 		JSONReader jr = new JSONReader();
@@ -94,10 +94,10 @@ public class DarkPlanner {
 				compteur.set(i, 1);
 			}
 
-			Trajet prev = null;
 			List<String> path = new ArrayList<String>(trajets.size());
 			magnifier: // le "magnifier" est une grosse loupe ^^;
 			do {
+				Trajet prev = null;
 				int[] selectionnes = compteur.get();
 				BigInteger gain = BigInteger.ZERO;
 
@@ -116,18 +116,20 @@ public class DarkPlanner {
 						prev = t;
 					}
 				}
-				gain = gain.add(prev.getPRIX());
-				path.add(prev.getVOL());
+				if (prev != null) {
+					gain = gain.add(prev.getPRIX());
+					path.add(prev.getVOL());
 
-				// on ne prend que strictement meilleur
-				if (gain.compareTo(result.getGain()) > 0) {
-					result.setGain(gain);
-					result.getPath().clear();
-					result.getPath().addAll(path);
+					// on ne prend que strictement meilleur
+					if (gain.compareTo(result.getGain()) > 0) {
+						result.setGain(gain);
+						result.getPath().clear();
+						result.getPath().addAll(path);
 
-					// on n'ira pas plus haut
-					if (gain.equals(gainMax)) {
-						break magnifier;
+						// on n'ira pas plus haut
+						if (gain.equals(gainMax)) {
+							break magnifier;
+						}
 					}
 				}
 			} while (compteur.dec());

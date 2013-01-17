@@ -89,6 +89,24 @@ public class DarkPlannerTest {
 		Assert.assertEquals("LEGACY01", p.getPath().get(1));
 	}
 
+	@Test
+	public void testClean5() {
+		DarkPlanner dp = new DarkPlanner();
+		final List<Trajet> trajets = charge(dp, "payload.cs.0.txt");
+		Assert.assertEquals(4, trajets.size());
+
+		final List<Trajet> filtre = dp.filtre(trajets);
+
+		Assert.assertEquals(4, filtre.size());
+
+		final Planning p = dp.resoud(filtre);
+
+		Assert.assertEquals(18, p.getGain().intValue());
+		Assert.assertEquals(2, p.getPath().size());
+		Assert.assertEquals("AF514", p.getPath().get(0));
+		Assert.assertEquals("BA01", p.getPath().get(1));
+	}
+
 	public List<Trajet> charge(DarkPlanner dp, final String fichier) {
 		final String jsonText = IO.readText(this.getClass().getResourceAsStream(fichier));
 		return dp.chargeTexteJSON(jsonText);
