@@ -133,6 +133,16 @@ then
 	update($dr);
 end
 
+rule "Dafuq"
+when
+	$dr : DecisionRoutage(decide == false)
+	Parametre(nom == "q", valeur == "As tu copie le code de ndeloof(OUI/NON/JE_SUIS_NICOLAS)")
+then
+	// où est l'intérêt !
+	$dr.resoudStatique("NON.txt");
+	update($dr);
+end 
+
 
 rule "Question inconnue"
 salience -1
