@@ -26,10 +26,12 @@ public class DarkPlanner {
 		@SuppressWarnings("unchecked")
 		final List<Map<String, Object>> dicos = (List<Map<String, Object>>) jr.read(jsonText);
 		final List<Trajet> result = new ArrayList<Trajet>();
-		for (Map<String, Object> dico : dicos) {
-			result.add(rehydrate(dico, Trajet.class));
+		if (dicos != null) {
+			for (Map<String, Object> dico : dicos) {
+				result.add(rehydrate(dico, Trajet.class));
+			}
+			Collections.sort(result);
 		}
-		Collections.sort(result);
 		return result;
 	}
 
