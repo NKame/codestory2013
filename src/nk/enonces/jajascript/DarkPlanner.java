@@ -77,6 +77,7 @@ public class DarkPlanner {
 	 * @return
 	 */
 	protected Planning resoud(final List<Trajet> trajets) {
+		int limiteCalcul = 10000;
 		Planning result = new Planning();
 
 		// il faut tester "toutes" les combinaisons de trajets entre eux...
@@ -133,6 +134,10 @@ public class DarkPlanner {
 							break magnifier;
 						}
 					}
+				}
+				--limiteCalcul;
+				if(limiteCalcul <= 0) {
+					throw new IllegalArgumentException("Houlà trop compliqué, il va falloir y réfléchir");
 				}
 			} while (compteur.dec());
 		}
