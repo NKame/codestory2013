@@ -1,5 +1,7 @@
 package nk.enonces.jajascript;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.List;
 
 import junit.framework.Assert;
@@ -28,7 +30,7 @@ public class DarkPlannerTest {
 
 		final Planning p = dp.resoud(filtre);
 
-		Assert.assertTrue(p.getGain().intValue() == 12);
+		Assert.assertEquals(12, p.getGain().intValue());
 		Assert.assertEquals(1, p.getPath().size());
 		Assert.assertEquals("AF516", p.getPath().get(0));
 	}
@@ -105,6 +107,33 @@ public class DarkPlannerTest {
 		Assert.assertEquals(2, p.getPath().size());
 		Assert.assertEquals("AF514", p.getPath().get(0));
 		Assert.assertEquals("BA01", p.getPath().get(1));
+	}
+
+	@Test
+	public void testeTout() {
+		final String dirName = this.getClass().getResource(".").toExternalForm().substring("file:".length());
+		final File dir = new File(dirName);
+		final DarkPlanner dp = new DarkPlanner();
+		for (String  s : dir.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File dir, String name) {
+				return name.startsWith("rl") && name.endsWith(".txt");
+			}
+		})) {
+			System.out.format("%5s||", s);
+			long start = System.currentTimeMillis();
+			final List<Trajet> trajets = charge(dp, s);
+			long end = System.currentTimeMillis();
+			System.out.format("%d:%d//", end-start, trajets.size());
+			start = end;
+			final List<Trajet> filtre = dp.filtre(trajets);
+			end = System.currentTimeMillis();
+			System.out.format("%d:%d//", end-start, filtre.size());
+			start = end;
+			final Planning p = dp.resoud(filtre);
+			end = System.currentTimeMillis();
+			System.out.format("%d:%d\n", end-start, p.getPath().size());
+		}
 	}
 
 	public List<Trajet> charge(DarkPlanner dp, final String fichier) {
