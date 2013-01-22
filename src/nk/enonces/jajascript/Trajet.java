@@ -136,5 +136,8 @@ public class Trajet implements Comparable<Trajet> {
 		return true;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "Trajet [VOL=" + VOL + ", DEPART=" + DEPART + ", DUREE=" + DUREE + ", PRIX=" + PRIX + "]";
+	}
 }

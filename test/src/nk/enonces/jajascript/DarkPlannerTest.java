@@ -108,6 +108,43 @@ public class DarkPlannerTest {
 		Assert.assertEquals("AF514", p.getPath().get(0));
 		Assert.assertEquals("BA01", p.getPath().get(1));
 	}
+	
+	@Test
+	public void testClean6() {
+		DarkPlanner dp = new DarkPlanner();
+		final List<Trajet> trajets = charge(dp, "rl2_0.txt");
+		Assert.assertEquals(5, trajets.size());
+
+		final List<Trajet> filtre = dp.filtre(trajets);
+
+		Assert.assertEquals(5, filtre.size());
+
+		final Planning p = dp.resoud(filtre);
+
+		Assert.assertEquals(28, p.getGain().intValue());
+		Assert.assertEquals(2, p.getPath().size());
+		Assert.assertEquals("uninterested-theoretician-65", p.getPath().get(0));
+		Assert.assertEquals("black-refrigerator-82", p.getPath().get(1));
+	}
+	
+	@Test
+	public void testClean7() {
+		DarkPlanner dp = new DarkPlanner();
+		final List<Trajet> trajets = charge(dp, "rl2_1.txt");
+		Assert.assertEquals(10, trajets.size());
+
+		final List<Trajet> filtre = dp.filtre(trajets);
+
+		Assert.assertEquals(String.valueOf(filtre), 8, filtre.size());
+
+		final Planning p = dp.resoud(filtre);
+
+		Assert.assertEquals(66, p.getGain().intValue());
+		Assert.assertEquals(3, p.getPath().size());
+		Assert.assertEquals("smiling-antenna-49", p.getPath().get(0));
+		Assert.assertEquals("skinny-trader-10", p.getPath().get(1));
+		Assert.assertEquals("quaint-bagpipe-71", p.getPath().get(2));
+	}
 
 	@Test
 	public void testeTout() {

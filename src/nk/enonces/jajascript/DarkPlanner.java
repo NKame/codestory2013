@@ -2,12 +2,12 @@ package nk.enonces.jajascript;
 
 import static nk.rdb.AerosolEvian.rehydrate;
 
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -158,13 +158,13 @@ public class DarkPlanner {
 		final SortedMap<Noeud, EtatNoeud> graphe = prepareGraphe(trajets);
 
 		final Noeud debut = graphe.firstKey();
-		debut.marquage = BigDecimal.ZERO;
+		debut.marquage = BigInteger.ZERO;
 		final Noeud fin = graphe.lastKey();
 
 		final SortedSet<Noeud> q = new TreeSet<Noeud>(new Comparator<Noeud>() {
 			@Override
 			public int compare(Noeud o1, Noeud o2) {
-				int result = o1.marquage.compareTo(o2.marquage);
+				int result = -o1.marquage.compareTo(o2.marquage);
 				if (result == 0) {
 					result = o1.compareTo(o2);
 				}
@@ -180,13 +180,13 @@ public class DarkPlanner {
 				// fini
 				break;
 			}
-			if(!q.remove(proche)) {
+			if (!q.remove(proche)) {
 				throw new IllegalArgumentException("C'est ça");
 			}
 
-			if(explore(proche, fin, graphe, q)) {
+			if (explore(proche, graphe, q)) {
 				// on exploré jusqu'au bout
-				break;
+				// EE break;
 			}
 		}
 
@@ -206,13 +206,13 @@ public class DarkPlanner {
 				continue;
 			}
 			Noeud curr = it.next();
-			EtatNoeud en = prev.e;
+			EtatNoeud en = prev.etat;
 			for (Vertice v : en.vertices) {
 				if (v.fin.equals(curr)) {
 					// vertice trouvée, on passe à la suite
 					if (v.vol != null) {
 						result.getPath().add(v.vol);
-						result.setGain(result.getGain().add(v.gain));
+						result.setGain(result.getGain().add(v.poids));
 					}
 					prev = curr;
 					continue outer;
@@ -226,54 +226,79 @@ public class DarkPlanner {
 
 	/**
 	 * Renvoie true si a touché la fin.
+	 * 
 	 * @param depart
 	 * @param fin
 	 * @param graphe
 	 * @param q
 	 * @return
 	 */
-	protected boolean explore(final Noeud depart, Noeud fin, final SortedMap<Noeud, EtatNoeud> graphe, final SortedSet<Noeud> q) {
-		for (Vertice v : depart.e.vertices) {
+	protected boolean explore(final Noeud depart, final SortedMap<Noeud, EtatNoeud> graphe,
+			final SortedSet<Noeud> q) {
+		for (Vertice v : depart.etat.vertices) {
 			if (q.contains(v.fin)) {
-				EtatNoeud eFin = graphe.get(v.fin);
-				BigDecimal parcours = depart.marquage.add(v.poids);
-				if (parcours.compareTo(eFin.n.marquage) < 0) {
+				final EtatNoeud eFin = graphe.get(v.fin);
+
+				BigInteger parcours = null;
+				if (v.poids == null) {
+					parcours = depart.marquage;
+					
+					/*
+					parcours = max(eFin, graphe, q);
+					if(parcours != null) {
+						parcours = parcours.add(depart.marquage);
+					}*/
+				} else {
+					parcours = depart.marquage.add(v.poids);
+				}
+
+				if (parcours != null && parcours.compareTo(eFin.n.marquage) > 0) {
 					// on enlève avant de mettre à jour la valeur,
 					// sinon ça pète le TreeSet
 					q.remove(eFin.n);
-					
+
 					eFin.n.marquage = parcours;
 					eFin.n.prev = depart;
-					
-					if(eFin.n.equals(fin)) {
-						// c'est fini
-						return true;
-					}
-					
-					
 
-					// si la vertice est factice, on continue plus loin
-					if (v.vol == null) {
-						if(explore(eFin.n, fin, graphe, q)) {
-							return true;
-						}
-					} else {
-						// pas factice, on remet le noeud pour tri
-						q.add(eFin.n);
-					}
+					q.add(eFin.n);
+				}
+				
+				if(v.poids == null) {
+					// je veux marquer uniquement en ligne direct des nulls
+					explore(eFin.n, graphe, q);
 				}
 			}
 		}
 		return false;
 	}
 
-	protected SortedMap<Noeud, EtatNoeud> prepareGraphe(final List<Trajet> trajets) {
-		SortedMap<Noeud, EtatNoeud> result = new TreeMap<Noeud, EtatNoeud>();
-		final BigDecimal un = new BigDecimal(1);
-		un.setScale(15);
+	private BigInteger max(EtatNoeud e, SortedMap<Noeud, EtatNoeud> graphe, SortedSet<Noeud> q) {
+		BigInteger result = null;
+		for (Vertice v : e.vertices) {
+			if (q.contains(v.fin)) {
+				BigInteger poids = null;
+				
+				if (v.poids == null) {
+					final EtatNoeud eFin = graphe.get(v.fin);
+					poids = max(eFin, graphe, q);
+				} else {
+					poids = v.poids;
+				}
+				if(poids != null && (result == null || poids.compareTo(result) > 0)) {
+					result = poids;
+				}
+			}
+		}
+		return result;
+	}
 
+	protected SortedMap<Noeud, EtatNoeud> prepareGraphe(final List<Trajet> trajets) {
+		final SortedMap<Noeud, EtatNoeud> result = new TreeMap<Noeud, EtatNoeud>();
+		final Map<Noeud, EtatNoeud> backlinks = new HashMap<Noeud, EtatNoeud>();
+		
 		// d'abord il nous faut un graphe
 		for (Trajet t : trajets) {
+			// on construit le graphe
 			final Noeud dep = new Noeud(t.getDEPART());
 			final Noeud arr = new Noeud(t.getDEPART().add(t.getDUREE()));
 
@@ -282,14 +307,23 @@ public class DarkPlanner {
 				e = new EtatNoeud(dep);
 				result.put(dep, e);
 			}
-			e.vertices.add(new Vertice(arr, t.getVOL(), t.getPRIX(), un.divide(new BigDecimal(t.getPRIX(), 0),
-					RoundingMode.FLOOR)));
+			final Vertice newVertice = new Vertice(arr, t.getVOL(), t.getPRIX());
+			e.vertices.add(newVertice);
 
 			if (!result.containsKey(arr)) {
 				result.put(arr, new EtatNoeud(arr));
 			}
+			
+			// et les backrefs
+			EtatNoeud bl = backlinks.get(arr);
+			if(bl == null) {
+				bl = new EtatNoeud(new Noeud(arr.id));
+				backlinks.put(arr, bl);
+			}
+			bl.vertices.add(newVertice);
 		}
 		Noeud prev = null;
+		Collection<Noeud> toRemove = new ArrayList<Noeud>(result.size());
 		// ensuite on s'assure qu'il y a un chemin partout
 		outer: for (Iterator<Noeud> it = result.keySet().iterator(); it.hasNext();) {
 			if (prev == null) {
@@ -297,7 +331,32 @@ public class DarkPlanner {
 				continue;
 			}
 			Noeud curr = it.next();
-			EtatNoeud en = prev.e;
+			EtatNoeud en = prev.etat;
+			while (curr.etat.vertices.isEmpty()) {
+				// ce noeud est inutile, il faut le fusionner avec le suivant
+				// il faut retrouver tout ceux qui pointent vers lui...
+				if(!it.hasNext()) {
+					// oups, on est à la fin
+					break;
+				}
+				Noeud suivant = it.next();
+				
+				EtatNoeud bl = backlinks.remove(curr);
+				final List<Vertice> vieillesVertices = bl.vertices;
+				for(Vertice inverse : vieillesVertices) {
+					inverse.fin = suivant;
+				}
+				// et on réassocie ces vertices au noeud courant
+				bl = backlinks.get(suivant);
+				if(bl == null) {
+					bl = new EtatNoeud(new Noeud(suivant.id));
+					backlinks.put(suivant, bl);
+				}
+				bl.vertices.addAll(vieillesVertices);
+				toRemove.add(curr);
+				// et on continue
+				curr = suivant;
+			}
 			for (Vertice v : en.vertices) {
 				if (v.fin.equals(curr)) {
 					prev = curr;
@@ -305,19 +364,20 @@ public class DarkPlanner {
 				}
 			}
 			// pas de vertice trouvée entre prev et curr
-			en.vertices.add(new Vertice(curr, null, null, BigDecimal.ZERO));
+			en.vertices.add(new Vertice(curr, null, null));
 
 			prev = curr;
 		}
+		result.keySet().removeAll(toRemove);
 
 		return result;
 	}
 
 	private static class Noeud implements Comparable<Noeud> {
-		public EtatNoeud e;
+		public EtatNoeud etat;
 		public Noeud prev = null;
 		final BigInteger id;
-		BigDecimal marquage = BigDecimal.valueOf(Long.MAX_VALUE);
+		BigInteger marquage = BigInteger.valueOf(-1l);
 
 		public Noeud(BigInteger id) {
 			this.id = id;
@@ -339,14 +399,14 @@ public class DarkPlanner {
 		}
 
 		public String toString() {
-			return "N(" + id + ", " + e.vertices + ")";
+			return "N(" + id + ", p=" + marquage + ", " + etat.vertices + ")";
 		}
 	}
 
 	private static class EtatNoeud {
 		public EtatNoeud(Noeud n) {
 			this.n = n;
-			n.e = this;
+			n.etat = this;
 		}
 
 		final Noeud n;
@@ -358,15 +418,13 @@ public class DarkPlanner {
 	}
 
 	private static class Vertice {
-		private final Noeud fin;
+		private Noeud fin;
 		private final String vol;
-		private final BigInteger gain;
-		private final BigDecimal poids;
+		private final BigInteger poids;
 
-		public Vertice(Noeud fin, String vol, BigInteger gain, BigDecimal poids) {
+		public Vertice(Noeud fin, String vol, BigInteger poids) {
 			this.fin = fin;
 			this.vol = vol;
-			this.gain = gain;
 			this.poids = poids;
 		}
 
