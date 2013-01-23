@@ -30,7 +30,7 @@ public class ExtraitDonnees {
 
 			int i = 0;
 			for (Map<String, Object> requete : tableau) {
-				Writer fw = new OutputStreamWriter(new FileOutputStream("test/src/nk/enonces/jajascript/rl2_" + i
+				Writer fw = new OutputStreamWriter(new FileOutputStream("test/src/nk/enonces/jajascript/rl3_" + i
 						+ ".txt"), "utf-8");
 				fw.write((String) requete.get("postBody"));
 				fw.close();

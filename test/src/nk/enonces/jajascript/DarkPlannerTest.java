@@ -3,9 +3,14 @@ package nk.enonces.jajascript;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 
 import junit.framework.Assert;
 import nk.assistance.IO;
+import nk.enonces.jajascript.DarkPlanner.EtatNoeud;
+import nk.enonces.jajascript.DarkPlanner.Noeud;
+import nk.enonces.jajascript.DarkPlanner.Vertice;
 
 import org.junit.Test;
 
@@ -108,7 +113,7 @@ public class DarkPlannerTest {
 		Assert.assertEquals("AF514", p.getPath().get(0));
 		Assert.assertEquals("BA01", p.getPath().get(1));
 	}
-	
+
 	@Test
 	public void testClean6() {
 		DarkPlanner dp = new DarkPlanner();
@@ -126,7 +131,7 @@ public class DarkPlannerTest {
 		Assert.assertEquals("uninterested-theoretician-65", p.getPath().get(0));
 		Assert.assertEquals("black-refrigerator-82", p.getPath().get(1));
 	}
-	
+
 	@Test
 	public void testClean7() {
 		DarkPlanner dp = new DarkPlanner();
@@ -147,11 +152,29 @@ public class DarkPlannerTest {
 	}
 
 	@Test
+	public void testClean8() {
+		DarkPlanner dp = new DarkPlanner();
+		final List<Trajet> trajets = charge(dp, "rl3_38.txt");
+		Assert.assertEquals(65, trajets.size());
+
+		final List<Trajet> filtre = dp.filtre(trajets);
+
+		Assert.assertEquals(filtre.size() + " != " + 8 + "; " + String.valueOf(filtre), 55, filtre.size());
+
+		final SortedMap<Noeud, EtatNoeud> graphe = dp.prepareGraphe(filtre);
+		for (Noeud n : graphe.keySet()) {
+			for (Vertice v : n.etat.vertices) {
+				System.out.println("n" + n.id + " -> n" + v.fin.id + "[label=\"" + v.vol + "; " + v.poids + "\"];");
+			}
+		}
+	}
+
+	@Test
 	public void testeTout() {
 		final String dirName = this.getClass().getResource(".").toExternalForm().substring("file:".length());
 		final File dir = new File(dirName);
 		final DarkPlanner dp = new DarkPlanner();
-		for (String  s : dir.list(new FilenameFilter() {
+		for (String s : dir.list(new FilenameFilter() {
 			@Override
 			public boolean accept(File dir, String name) {
 				return name.startsWith("rl") && name.endsWith(".txt");
@@ -161,15 +184,15 @@ public class DarkPlannerTest {
 			long start = System.currentTimeMillis();
 			final List<Trajet> trajets = charge(dp, s);
 			long end = System.currentTimeMillis();
-			System.out.format("%d:%d//", end-start, trajets.size());
+			System.out.format("%d:%d//", end - start, trajets.size());
 			start = end;
 			final List<Trajet> filtre = dp.filtre(trajets);
 			end = System.currentTimeMillis();
-			System.out.format("%d:%d//", end-start, filtre.size());
+			System.out.format("%d:%d//", end - start, filtre.size());
 			start = end;
 			final Planning p = dp.resoud(filtre);
 			end = System.currentTimeMillis();
-			System.out.format("%d:%d\n", end-start, p.getPath().size());
+			System.out.format("%d:%d\n", end - start, p.getPath().size());
 		}
 	}
 

@@ -178,7 +178,7 @@ public class DarkPlanner {
 			final Noeud proche = q.first();
 			if (proche.equals(fin)) {
 				// fini
-				break;
+				// break;
 			}
 			if (!q.remove(proche)) {
 				throw new IllegalArgumentException("C'est ça");
@@ -242,12 +242,11 @@ public class DarkPlanner {
 				BigInteger parcours = null;
 				if (v.poids == null) {
 					parcours = depart.marquage;
-					
+
 					/*
-					parcours = max(eFin, graphe, q);
-					if(parcours != null) {
-						parcours = parcours.add(depart.marquage);
-					}*/
+					 * parcours = max(eFin, graphe, q); if(parcours != null) { parcours =
+					 * parcours.add(depart.marquage); }
+					 */
 				} else {
 					parcours = depart.marquage.add(v.poids);
 				}
@@ -262,8 +261,8 @@ public class DarkPlanner {
 
 					q.add(eFin.n);
 				}
-				
-				if(v.poids == null) {
+
+				if (v.poids == null) {
 					// je veux marquer uniquement en ligne direct des nulls
 					explore(eFin.n, graphe, q);
 				}
@@ -277,14 +276,14 @@ public class DarkPlanner {
 		for (Vertice v : e.vertices) {
 			if (q.contains(v.fin)) {
 				BigInteger poids = null;
-				
+
 				if (v.poids == null) {
 					final EtatNoeud eFin = graphe.get(v.fin);
 					poids = max(eFin, graphe, q);
 				} else {
 					poids = v.poids;
 				}
-				if(poids != null && (result == null || poids.compareTo(result) > 0)) {
+				if (poids != null && (result == null || poids.compareTo(result) > 0)) {
 					result = poids;
 				}
 			}
@@ -295,7 +294,7 @@ public class DarkPlanner {
 	protected SortedMap<Noeud, EtatNoeud> prepareGraphe(final List<Trajet> trajets) {
 		final SortedMap<Noeud, EtatNoeud> result = new TreeMap<Noeud, EtatNoeud>();
 		final Map<Noeud, EtatNoeud> backlinks = new HashMap<Noeud, EtatNoeud>();
-		
+
 		// d'abord il nous faut un graphe
 		for (Trajet t : trajets) {
 			// on construit le graphe
@@ -313,10 +312,10 @@ public class DarkPlanner {
 			if (!result.containsKey(arr)) {
 				result.put(arr, new EtatNoeud(arr));
 			}
-			
+
 			// et les backrefs
 			EtatNoeud bl = backlinks.get(arr);
-			if(bl == null) {
+			if (bl == null) {
 				bl = new EtatNoeud(new Noeud(arr.id));
 				backlinks.put(arr, bl);
 			}
@@ -335,20 +334,20 @@ public class DarkPlanner {
 			while (curr.etat.vertices.isEmpty()) {
 				// ce noeud est inutile, il faut le fusionner avec le suivant
 				// il faut retrouver tout ceux qui pointent vers lui...
-				if(!it.hasNext()) {
+				if (!it.hasNext()) {
 					// oups, on est à la fin
 					break;
 				}
 				Noeud suivant = it.next();
-				
+
 				EtatNoeud bl = backlinks.remove(curr);
 				final List<Vertice> vieillesVertices = bl.vertices;
-				for(Vertice inverse : vieillesVertices) {
+				for (Vertice inverse : vieillesVertices) {
 					inverse.fin = suivant;
 				}
 				// et on réassocie ces vertices au noeud courant
 				bl = backlinks.get(suivant);
-				if(bl == null) {
+				if (bl == null) {
 					bl = new EtatNoeud(new Noeud(suivant.id));
 					backlinks.put(suivant, bl);
 				}
@@ -373,7 +372,7 @@ public class DarkPlanner {
 		return result;
 	}
 
-	private static class Noeud implements Comparable<Noeud> {
+	static class Noeud implements Comparable<Noeud> {
 		public EtatNoeud etat;
 		public Noeud prev = null;
 		final BigInteger id;
@@ -403,7 +402,7 @@ public class DarkPlanner {
 		}
 	}
 
-	private static class EtatNoeud {
+	static class EtatNoeud {
 		public EtatNoeud(Noeud n) {
 			this.n = n;
 			n.etat = this;
@@ -417,10 +416,10 @@ public class DarkPlanner {
 		}
 	}
 
-	private static class Vertice {
-		private Noeud fin;
-		private final String vol;
-		private final BigInteger poids;
+	static class Vertice {
+		Noeud fin;
+		final String vol;
+		final BigInteger poids;
 
 		public Vertice(Noeud fin, String vol, BigInteger poids) {
 			this.fin = fin;
