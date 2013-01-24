@@ -2,6 +2,7 @@ package nk.enonces.jajascript;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -145,28 +146,51 @@ public class DarkPlannerTest {
 		final Planning p = dp.resoud(filtre);
 
 		Assert.assertEquals(66, p.getGain().intValue());
-		Assert.assertEquals(3, p.getPath().size());
+		Assert.assertEquals("Obtenu : " + p.getPath() , 3, p.getPath().size());
 		Assert.assertEquals("smiling-antenna-49", p.getPath().get(0));
 		Assert.assertEquals("skinny-trader-10", p.getPath().get(1));
 		Assert.assertEquals("quaint-bagpipe-71", p.getPath().get(2));
 	}
 
 	@Test
-	public void testClean8() {
+	public void produitDot() {
 		DarkPlanner dp = new DarkPlanner();
-		final List<Trajet> trajets = charge(dp, "rl3_38.txt");
-		Assert.assertEquals(65, trajets.size());
-
+		final List<Trajet> trajets = charge(dp, "payload2.txt");
 		final List<Trajet> filtre = dp.filtre(trajets);
 
-		Assert.assertEquals(filtre.size() + " != " + 8 + "; " + String.valueOf(filtre), 55, filtre.size());
+		// Assert.assertEquals(filtre.size() + " != " + 8 + "; " + String.valueOf(filtre), 55, filtre.size());
+		System.out.println("digraph total { outputorder=out; compound=true; \n");
+		final Map<Noeud, EtatNoeud> backlinks = new HashMap<Noeud, EtatNoeud>();
 
-		final SortedMap<Noeud, EtatNoeud> graphe = dp.prepareGraphe(filtre);
+		// d'abord il nous faut un graphe
+		final SortedMap<Noeud, EtatNoeud> graphe = dp.creeGrapheInitial(filtre, backlinks);
+		dotSubgraph(graphe, "Etape0");
+		// suppression des noeuds inutiles "avant"
+		dp.grapheEnleveInutilesAvant(graphe, backlinks);
+		dotSubgraph(graphe, "Etape1");
+		// suppression des noeuds inutiles "arrière"
+		dp.grapheEnleveInutilesArriere(graphe, backlinks);
+		dotSubgraph(graphe, "Etape2");
+		// suppression des liens "évidemment" inutiles
+		dp.grapheEnleveVerticesDoubless(graphe.keySet());
+		dotSubgraph(graphe, "Etape3");
+		// ensuite on s'assure qu'il y a un chemin partout
+		dp.grapheComplete(graphe);
+		
+		dotSubgraph(graphe, "Etape4");
+		System.out.println("}");
+	}
+
+	protected void dotSubgraph(final SortedMap<Noeud, EtatNoeud> graphe, String nom) {
+		System.out.println("subgraph cluster" + nom + "{ label=\"" + nom + "\"");
 		for (Noeud n : graphe.keySet()) {
+			System.out.println("n" + nom + n.id + " [label=n" + n.id + "];\n");
 			for (Vertice v : n.etat.vertices) {
-				System.out.println("n" + n.id + " -> n" + v.fin.id + "[label=\"" + v.vol + "; " + v.poids + "\"];");
+				System.out
+						.println("n" + nom + n.id + " -> n" + nom + v.fin.id + "[label=\"" + v.vol + "; " + v.poids + "\"];");
 			}
 		}
+		System.out.println("}");
 	}
 
 	@Test
@@ -180,19 +204,30 @@ public class DarkPlannerTest {
 				return name.startsWith("rl") && name.endsWith(".txt");
 			}
 		})) {
-			System.out.format("%5s||", s);
+			System.out.format("%5s;", s);
 			long start = System.currentTimeMillis();
 			final List<Trajet> trajets = charge(dp, s);
 			long end = System.currentTimeMillis();
-			System.out.format("%d:%d//", end - start, trajets.size());
+			System.out.format("%dms;%d;", end - start, trajets.size());
 			start = end;
 			final List<Trajet> filtre = dp.filtre(trajets);
 			end = System.currentTimeMillis();
-			System.out.format("%d:%d//", end - start, filtre.size());
+			System.out.format("%dms;%d;", end - start, filtre.size());
 			start = end;
 			final Planning p = dp.resoud(filtre);
 			end = System.currentTimeMillis();
-			System.out.format("%d:%d\n", end - start, p.getPath().size());
+			System.out.format("%dms;%d;%d;", end - start, p.getPath().size(), p.getGain());
+
+			start = end;
+			final SortedMap<Noeud, EtatNoeud> graphe = dp.prepareGraphe(filtre);
+
+			Planning gainMax = dp.brutalMassif(graphe, graphe.firstKey());
+			end = System.currentTimeMillis();
+			System.out.format("%dms;%d\n", end - start, gainMax.getGain());
+			/*
+			 * if(gainMax.compareTo(p.getGain()) > 0) { Assert.fail("Gain trop faible : " + p.getGain() +
+			 * " au lieu de " + gainMax); }
+			 */
 		}
 	}
 

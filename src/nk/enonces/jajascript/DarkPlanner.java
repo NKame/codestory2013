@@ -11,10 +11,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import javax.el.MethodNotFoundException;
 
 import nk.enonces.MultiCompteur;
 
@@ -153,6 +156,13 @@ public class DarkPlanner {
 	}
 
 	protected Planning resoud(final List<Trajet> trajets) {
+		final SortedMap<Noeud, EtatNoeud> graphe = prepareGraphe(trajets);
+		
+		return brutalMassif(graphe, graphe.firstKey());
+	}
+	                                                       
+	
+	protected Planning resoudDijkstra(final List<Trajet> trajets) {
 		Planning result = new Planning();
 
 		final SortedMap<Noeud, EtatNoeud> graphe = prepareGraphe(trajets);
@@ -292,10 +302,53 @@ public class DarkPlanner {
 	}
 
 	protected SortedMap<Noeud, EtatNoeud> prepareGraphe(final List<Trajet> trajets) {
-		final SortedMap<Noeud, EtatNoeud> result = new TreeMap<Noeud, EtatNoeud>();
+
 		final Map<Noeud, EtatNoeud> backlinks = new HashMap<Noeud, EtatNoeud>();
 
 		// d'abord il nous faut un graphe
+		final SortedMap<Noeud, EtatNoeud> result = creeGrapheInitial(trajets, backlinks);
+
+		// suppression des noeuds inutiles "avant"
+		grapheEnleveInutilesAvant(result, backlinks);
+
+		// suppression des noeuds inutiles "arrière"
+		grapheEnleveInutilesArriere(result, backlinks);
+
+		// suppression des liens "évidemment" inutiles
+		grapheEnleveVerticesDoubless(result.keySet());
+
+		// ensuite on s'assure qu'il y a un chemin partout
+		grapheComplete(result);
+
+		return result;
+	}
+
+	protected void grapheComplete(final SortedMap<Noeud, EtatNoeud> result) {
+		Noeud prev = null;
+		outer: for (Iterator<Noeud> it = result.keySet().iterator(); it.hasNext();) {
+			if (prev == null) {
+				prev = it.next();
+				continue;
+			}
+			Noeud curr = it.next();
+			EtatNoeud en = prev.etat;
+
+			for (Vertice v : en.vertices) {
+				if (v.fin.equals(curr)) {
+					prev = curr;
+					continue outer;
+				}
+			}
+			// pas de vertice trouvée entre prev et curr
+			en.vertices.add(new Vertice(curr, null, null));
+
+			prev = curr;
+		}
+	}
+
+	protected SortedMap<Noeud, EtatNoeud> creeGrapheInitial(final List<Trajet> trajets,
+			final Map<Noeud, EtatNoeud> backlinks) {
+		final SortedMap<Noeud, EtatNoeud> result = new TreeMap<Noeud, EtatNoeud>();
 		for (Trajet t : trajets) {
 			// on construit le graphe
 			final Noeud dep = new Noeud(t.getDEPART());
@@ -321,16 +374,22 @@ public class DarkPlanner {
 			}
 			bl.vertices.add(newVertice);
 		}
-		Noeud prev = null;
-		Collection<Noeud> toRemove = new ArrayList<Noeud>(result.size());
-		// ensuite on s'assure qu'il y a un chemin partout
-		outer: for (Iterator<Noeud> it = result.keySet().iterator(); it.hasNext();) {
-			if (prev == null) {
-				prev = it.next();
-				continue;
-			}
+		return result;
+	}
+
+	protected void grapheEnleveVerticesDoubless(Set<Noeud> noeuds) {
+		for (Noeud n : noeuds) {
+			// virer les vertices qui pointent vers le même noeud
+			vireVerticesDoublees(n.etat.vertices);
+		}
+	}
+
+	protected void grapheEnleveInutilesAvant(final SortedMap<Noeud, EtatNoeud> result,
+			final Map<Noeud, EtatNoeud> backlinks) {
+		final Collection<Noeud> toRemove = new ArrayList<Noeud>(result.size());
+		final Set<Noeud> clefs = result.keySet();
+		for (Iterator<Noeud> it = clefs.iterator(); it.hasNext();) {
 			Noeud curr = it.next();
-			EtatNoeud en = prev.etat;
 			while (curr.etat.vertices.isEmpty()) {
 				// ce noeud est inutile, il faut le fusionner avec le suivant
 				// il faut retrouver tout ceux qui pointent vers lui...
@@ -356,20 +415,84 @@ public class DarkPlanner {
 				// et on continue
 				curr = suivant;
 			}
-			for (Vertice v : en.vertices) {
-				if (v.fin.equals(curr)) {
-					prev = curr;
-					continue outer;
+		}
+
+		// boucle finie, on nettoie
+		clefs.removeAll(toRemove);
+	}
+
+	protected void grapheEnleveInutilesArriere(final SortedMap<Noeud, EtatNoeud> result,
+			final Map<Noeud, EtatNoeud> backlinks) {
+		final Collection<Noeud> toRemove = new ArrayList<Noeud>(result.size());
+		final List<Noeud> clefs = new ArrayList<Noeud>(result.keySet());
+		// parcours arrière
+		Collections.reverse(clefs);
+
+		for (Iterator<Noeud> it = clefs.iterator(); it.hasNext();) {
+			Noeud curr = it.next();
+			// tant que personne ne pointe vers ce noeud
+			while (backlinks.get(curr) == null) {
+				// ce noeud est inutile, il faut le fusionner avec le précédent
+				// il faut retrouver tout ceux qui pointent vers lui...
+				if (!it.hasNext()) {
+					// oups, on est au début du graphe
+					break;
+				}
+				final Noeud precedent = it.next();
+
+				toRemove.add(curr);
+				precedent.etat.vertices.addAll(curr.etat.vertices);
+				curr.etat.vertices.clear();
+
+				// on se fiche des backlinks, on ne le réutilisera pas après
+				// et on continue
+				curr = precedent;
+			}
+		}
+
+		// boucle finie, on nettoie
+		result.keySet().removeAll(toRemove);
+	}
+	
+	protected Planning brutalMassif(SortedMap<Noeud, EtatNoeud> graphe, Noeud n) {
+		Planning result = new Planning();
+		for(Vertice v : n.etat.vertices) {
+			Planning pourVertice = brutalMassif(graphe, graphe.get(v.fin).n);
+			if(v.poids != null) {
+				pourVertice.setGain(pourVertice.getGain().add(v.poids));
+			}
+			if(pourVertice.getGain().compareTo(result.getGain()) > 0) {
+				result.setGain(pourVertice.getGain());
+				result.getPath().clear();
+				if(v.vol != null) {
+					result.getPath().add(v.vol);
+				}
+				result.getPath().addAll(pourVertice.getPath());
+			}
+		}
+		return result;
+	}
+
+	private void vireVerticesDoublees(List<Vertice> vertices) {
+		if (!vertices.isEmpty()) {
+			final Map<Noeud, Vertice> traqueur = new HashMap<Noeud, Vertice>();
+			final List<Vertice> aVirer = new ArrayList<Vertice>(vertices.size() - 1);
+
+			for (Vertice v : vertices) {
+				Vertice traquee = traqueur.get(v.fin);
+				if (traquee == null) {
+					traqueur.put(v.fin, v);
+				} else {
+					if (v.poids.compareTo(traquee.poids) > 0) {
+						aVirer.add(traquee);
+						traqueur.put(v.fin, v);
+					} else {
+						aVirer.add(v);
+					}
 				}
 			}
-			// pas de vertice trouvée entre prev et curr
-			en.vertices.add(new Vertice(curr, null, null));
-
-			prev = curr;
+			vertices.removeAll(aVirer);
 		}
-		result.keySet().removeAll(toRemove);
-
-		return result;
 	}
 
 	static class Noeud implements Comparable<Noeud> {
