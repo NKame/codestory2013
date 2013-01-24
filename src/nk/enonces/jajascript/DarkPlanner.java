@@ -17,8 +17,6 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.el.MethodNotFoundException;
-
 import nk.enonces.MultiCompteur;
 
 import org.stringtree.json.JSONReader;
