@@ -23,10 +23,12 @@ import org.stringtree.json.JSONReader;
 
 public class DarkPlanner {
 
+	private static final BigInteger INFINITY = BigInteger.valueOf(Long.MAX_VALUE);
+
 	public Planning planifieLikeAWinner(final String jsonText) {
 		final List<Trajet> trajetsBruts = chargeTexteJSON(jsonText);
 		final List<Trajet> trajetsFiltres = filtre(trajetsBruts);
-		return resoud(trajetsFiltres);
+		return resoudDijkstra(trajetsFiltres);
 	}
 
 	protected List<Trajet> chargeTexteJSON(final String jsonText) {
@@ -155,24 +157,23 @@ public class DarkPlanner {
 
 	protected Planning resoud(final List<Trajet> trajets) {
 		final SortedMap<Noeud, EtatNoeud> graphe = prepareGraphe(trajets);
-		
+
 		return brutalMassif(graphe, graphe.firstKey());
 	}
-	                                                       
-	
+
 	protected Planning resoudDijkstra(final List<Trajet> trajets) {
 		Planning result = new Planning();
 
 		final SortedMap<Noeud, EtatNoeud> graphe = prepareGraphe(trajets);
 
 		final Noeud debut = graphe.firstKey();
-		debut.marquage = BigInteger.ZERO;
+		debut.marquage = BigInteger.valueOf(Long.MAX_VALUE - 1);
 		final Noeud fin = graphe.lastKey();
 
 		final SortedSet<Noeud> q = new TreeSet<Noeud>(new Comparator<Noeud>() {
 			@Override
 			public int compare(Noeud o1, Noeud o2) {
-				int result = -o1.marquage.compareTo(o2.marquage);
+				int result = o1.marquage.compareTo(o2.marquage);
 				if (result == 0) {
 					result = o1.compareTo(o2);
 				}
@@ -184,7 +185,8 @@ public class DarkPlanner {
 
 		while (!q.isEmpty()) {
 			final Noeud proche = q.first();
-			if (proche.equals(fin)) {
+			if (proche.equals(debut)) {
+				debut.marquage = BigInteger.ZERO;
 				// fini
 				// break;
 			}
@@ -244,7 +246,7 @@ public class DarkPlanner {
 	protected boolean explore(final Noeud depart, final SortedMap<Noeud, EtatNoeud> graphe,
 			final SortedSet<Noeud> q) {
 		for (Vertice v : depart.etat.vertices) {
-			if (q.contains(v.fin)) {
+			//if (q.contains(v.fin)) {
 				final EtatNoeud eFin = graphe.get(v.fin);
 
 				BigInteger parcours = null;
@@ -252,14 +254,16 @@ public class DarkPlanner {
 					parcours = depart.marquage;
 
 					/*
-					 * parcours = max(eFin, graphe, q); if(parcours != null) { parcours =
-					 * parcours.add(depart.marquage); }
-					 */
+					parcours = max(eFin, graphe, q);
+					if (parcours != null) {
+						parcours = parcours.add(depart.marquage);
+					}*/
+
 				} else {
 					parcours = depart.marquage.add(v.poids);
 				}
 
-				if (parcours != null && parcours.compareTo(eFin.n.marquage) > 0) {
+				if (parcours != null && (INFINITY.compareTo(eFin.n.marquage) == 0 || parcours.compareTo(eFin.n.marquage) > 0)) {
 					// on enlève avant de mettre à jour la valeur,
 					// sinon ça pète le TreeSet
 					q.remove(eFin.n);
@@ -270,11 +274,12 @@ public class DarkPlanner {
 					q.add(eFin.n);
 				}
 
+				/*
 				if (v.poids == null) {
 					// je veux marquer uniquement en ligne direct des nulls
 					explore(eFin.n, graphe, q);
-				}
-			}
+				}*/
+			// }
 		}
 		return false;
 	}
@@ -451,18 +456,18 @@ public class DarkPlanner {
 		// boucle finie, on nettoie
 		result.keySet().removeAll(toRemove);
 	}
-	
+
 	protected Planning brutalMassif(SortedMap<Noeud, EtatNoeud> graphe, Noeud n) {
 		Planning result = new Planning();
-		for(Vertice v : n.etat.vertices) {
+		for (Vertice v : n.etat.vertices) {
 			Planning pourVertice = brutalMassif(graphe, graphe.get(v.fin).n);
-			if(v.poids != null) {
+			if (v.poids != null) {
 				pourVertice.setGain(pourVertice.getGain().add(v.poids));
 			}
-			if(pourVertice.getGain().compareTo(result.getGain()) > 0) {
+			if (pourVertice.getGain().compareTo(result.getGain()) > 0) {
 				result.setGain(pourVertice.getGain());
 				result.getPath().clear();
-				if(v.vol != null) {
+				if (v.vol != null) {
 					result.getPath().add(v.vol);
 				}
 				result.getPath().addAll(pourVertice.getPath());
@@ -497,7 +502,7 @@ public class DarkPlanner {
 		public EtatNoeud etat;
 		public Noeud prev = null;
 		final BigInteger id;
-		BigInteger marquage = BigInteger.valueOf(-1l);
+		BigInteger marquage = INFINITY;
 
 		public Noeud(BigInteger id) {
 			this.id = id;

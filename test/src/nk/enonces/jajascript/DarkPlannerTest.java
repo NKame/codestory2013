@@ -151,11 +151,31 @@ public class DarkPlannerTest {
 		Assert.assertEquals("skinny-trader-10", p.getPath().get(1));
 		Assert.assertEquals("quaint-bagpipe-71", p.getPath().get(2));
 	}
+	
+	@Test
+	public void testClean8() {
+		DarkPlanner dp = new DarkPlanner();
+		final List<Trajet> trajets = charge(dp, "rl10.txt");
+		Assert.assertEquals(15, trajets.size());
+
+		final List<Trajet> filtre = dp.filtre(trajets);
+
+		Assert.assertEquals(String.valueOf(filtre), 12, filtre.size());
+
+		final Planning p = dp.resoudDijkstra(filtre);
+
+		Assert.assertEquals(p.getGain() + " obtenu avec " + p.getPath(), 68, p.getGain().intValue());
+		Assert.assertEquals("Obtenu : " + p.getPath() , 4, p.getPath().size());
+		Assert.assertEquals("gorgeous-parakeet-90", p.getPath().get(0));
+		Assert.assertEquals("victorious-sometimes-63", p.getPath().get(1));
+		Assert.assertEquals("glamorous-sink-54", p.getPath().get(2));
+		Assert.assertEquals("crooked-female-27", p.getPath().get(3));
+	}
 
 	@Test
 	public void produitDot() {
 		DarkPlanner dp = new DarkPlanner();
-		final List<Trajet> trajets = charge(dp, "payload2.txt");
+		final List<Trajet> trajets = charge(dp, "rl10.txt");
 		final List<Trajet> filtre = dp.filtre(trajets);
 
 		// Assert.assertEquals(filtre.size() + " != " + 8 + "; " + String.valueOf(filtre), 55, filtre.size());
@@ -214,7 +234,7 @@ public class DarkPlannerTest {
 			end = System.currentTimeMillis();
 			System.out.format("%dms;%d;", end - start, filtre.size());
 			start = end;
-			final Planning p = dp.resoud(filtre);
+			final Planning p = dp.resoudDijkstra(filtre);
 			end = System.currentTimeMillis();
 			System.out.format("%dms;%d;%d;", end - start, p.getPath().size(), p.getGain());
 
@@ -223,7 +243,7 @@ public class DarkPlannerTest {
 
 			Planning gainMax = dp.brutalMassif(graphe, graphe.firstKey());
 			end = System.currentTimeMillis();
-			System.out.format("%dms;%d\n", end - start, gainMax.getGain());
+			System.out.format("%dms;%d;%d\n", end - start, gainMax.getGain(), gainMax.getGain().compareTo(p.getGain()));
 			/*
 			 * if(gainMax.compareTo(p.getGain()) > 0) { Assert.fail("Gain trop faible : " + p.getGain() +
 			 * " au lieu de " + gainMax); }
