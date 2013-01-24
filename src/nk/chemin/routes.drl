@@ -104,6 +104,7 @@ then
 	ArithmetiqueCalc evaluator = new ArithmetiqueCalc(nodes);
 	NumberFormat nf = NumberFormat.getNumberInstance(Locale.FRANCE);
 	nf.setGroupingUsed(false); 
+	nf.setMaximumFractionDigits(400);
 	String result = nf.format(evaluator.prog());
 	$dr.renvoieChaine(result);
 	update($dr);
