@@ -68,7 +68,7 @@ public class Question1Test {
 		agent.roule(dr, new Parametre("q", "Ca va bien (OUI/NON)"));
 
 		Assert.assertEquals(1, dr.getTypeRoutage());
-		Assert.assertEquals("/WEB-INF/static/NON.txt", dr.getTargetPath());
+		Assert.assertEquals("/WEB-INF/jsp/chaine.jsp", dr.getTargetPath());
 	}
 
 	@Test
