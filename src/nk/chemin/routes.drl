@@ -144,6 +144,14 @@ then
 	update($dr);
 end 
 
+rule "La suite"
+when
+	$dr : DecisionRoutage(decide == false)
+	Parametre(nom == "q", valeur == "Souhaites-tu-participer-a-la-suite-de-Code-Story(OUI/NON)")
+then
+	$dr.resoudStatique("OUI.txt");
+	update($dr);
+end
 
 rule "Question inconnue"
 salience -1
