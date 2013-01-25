@@ -159,7 +159,7 @@ when
 	$dr : DecisionRoutage(decide == false)
 	Parametre(nom == "q", valeur matches ".*\\(OUI/NON\\)")
 then
-	$dr.resoudStatique("NON.txt");
+	$dr.renvoieChaine("INDECIS");
 	update($dr);
 end
 
